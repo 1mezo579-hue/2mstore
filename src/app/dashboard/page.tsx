@@ -13,7 +13,8 @@ import {
   Bell,
   Search,
   Users,
-  LogOut
+  LogOut,
+  Menu
 } from "lucide-react";
 
 import { logout } from "@/app/actions/auth";
@@ -31,6 +32,7 @@ import SettingsPanel from "@/components/SettingsPanel";
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("inventory");
   const [user, setUser] = useState<{name: string, role: string} | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -89,8 +91,14 @@ export default function Dashboard() {
 
   return (
     <div className="app-container">
+      {/* Mobile Overlay */}
+      <div 
+        className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`} 
+        onClick={() => setIsSidebarOpen(false)}
+      ></div>
+
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="logo-icon">
             <Gamepad2 size={32} color="#0070D1" />
@@ -103,7 +111,10 @@ export default function Dashboard() {
             <button
               key={item.id}
               className={`nav-item ${activeTab === item.id ? "active" : ""}`}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {
+                setActiveTab(item.id);
+                setIsSidebarOpen(false);
+              }}
             >
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-label">{item.label}</span>
@@ -132,6 +143,10 @@ export default function Dashboard() {
       <main className="main-content">
         {/* Top Header */}
         <header className="top-header">
+          <button className="mobile-menu-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <Menu size={28} />
+          </button>
+          
           <div className="header-search">
             <Search size={20} className="search-icon" />
             <input type="text" placeholder="ابحث عن منتج، عميل، أو تذكرة صيانة..." className="search-input" />

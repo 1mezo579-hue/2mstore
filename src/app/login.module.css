@@ -98,7 +98,7 @@
 
 .inputField:focus {
   outline: none;
-  border-color: var(--ps-blue-light);
+  border-color: var(--primary-light);
   box-shadow: 0 0 0 2px rgba(0, 112, 209, 0.2);
 }
 
@@ -118,7 +118,7 @@
 }
 
 .forgotPassword {
-  color: var(--ps-blue-light);
+  color: var(--primary-light);
   transition: color 0.2s;
 }
 
@@ -127,7 +127,7 @@
 }
 
 .loginButton {
-  background: linear-gradient(135deg, var(--ps-blue-light), var(--ps-blue));
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
   color: white;
   border: none;
   border-radius: 12px;
