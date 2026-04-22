@@ -80,7 +80,7 @@ export default function InventoryPanel() {
             <input type="text" placeholder="ابحث باسم الصنف، الباركود، السيريال..." className="search-input" />
           </div>
 
-          <div style={{ display: "flex", gap: "12px" }}>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {["الكل", "أجهزة", "دراعات", "إكسسوارات", "قطع غيار"].map(cat => (
               <button 
                 key={cat} 

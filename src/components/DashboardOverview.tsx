@@ -51,7 +51,7 @@ export default function DashboardOverview() {
       </div>
 
       {/* Recent Activity placeholder */}
-      <div className="grid-cards" style={{ gridTemplateColumns: "2fr 1fr" }}>
+      <div className="grid-cards split-layout">
         <div className="card">
           <h3 style={{ marginBottom: "16px" }}>أحدث المبيعات</h3>
           <div style={{ color: "var(--text-secondary)", textAlign: "center", padding: "40px 0" }}>

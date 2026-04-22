@@ -93,12 +93,12 @@ export default function POSPanel() {
   );
 
   return (
-    <div style={{ display: "flex", gap: "24px", height: "calc(100vh - 120px)" }}>
+    <div className="pos-layout">
       {/* Products Section (Right) */}
       <div style={{ flex: 2, display: "flex", flexDirection: "column", gap: "20px" }}>
         
         {/* Search & Filters */}
-        <div className="card" style={{ padding: "16px", display: "flex", gap: "16px", alignItems: "center" }}>
+        <div className="card flex-between" style={{ padding: "16px" }}>
           <div className="header-search" style={{ flex: 1 }}>
             <Search size={20} className="search-icon" />
             <input 
@@ -110,7 +110,7 @@ export default function POSPanel() {
               autoFocus
             />
           </div>
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
             {["الكل", "أجهزة", "دراعات", "إكسسوارات"].map(cat => (
               <button 
                 key={cat} 
