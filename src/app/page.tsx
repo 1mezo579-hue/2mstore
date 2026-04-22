@@ -17,13 +17,18 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     
-    const res = await authenticateAdmin(username, password);
-    
-    setLoading(false);
-    if (res.success) {
-      router.push("/dashboard");
-    } else {
-      alert(res.error);
+    try {
+      const res = await authenticateAdmin(username, password);
+      
+      setLoading(false);
+      if (res.success) {
+        router.push("/dashboard");
+      } else {
+        alert(res.error);
+      }
+    } catch (err) {
+      setLoading(false);
+      alert("حدث خطأ غير متوقع. يرجى التأكد من ربط قاعدة البيانات بشكل صحيح.");
     }
   };
 
