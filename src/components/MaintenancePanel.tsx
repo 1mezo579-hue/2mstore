@@ -218,10 +218,10 @@ export default function MaintenancePanel() {
                     <option value="PlayStation 5" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 5</option>
                     <option value="PlayStation 4 Pro" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 4 Pro</option>
                     <option value="PlayStation 4 Slim" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 4 Slim</option>
+                    <option value="PlayStation 4" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 4</option>
                     <option value="PlayStation 3" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 3</option>
-                    <option value="DualSense Controller" style={{ background: "var(--ps-surface-dark)" }}>DualSense Controller (PS5)</option>
-                    <option value="DualShock 4" style={{ background: "var(--ps-surface-dark)" }}>DualShock 4 (PS4)</option>
-                    <option value="Xbox Series X/S" style={{ background: "var(--ps-surface-dark)" }}>Xbox Series X/S</option>
+                    <option value="DualSense (PS5)" style={{ background: "var(--ps-surface-dark)" }}>DualSense (PS5) Controller</option>
+                    <option value="DualShock 4" style={{ background: "var(--ps-surface-dark)" }}>DualShock 4 (PS4) Controller</option>
                     <option value="أخرى" style={{ background: "var(--ps-surface-dark)" }}>أخرى...</option>
                   </select>
                 </div>
