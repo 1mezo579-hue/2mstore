@@ -20,9 +20,13 @@ export async function createMaintenanceTicket(data: any) {
     customer = newC;
   }
 
-  const { error } = await supabase.from('MaintenanceTicket').insert([{
-    branchId: 1, customerId: customer?.id, deviceType: data.deviceType,
-    issue: data.issue, cost: data.estimatedCost || 0, status: 'RECEIVED'
+   const { error } = await supabase.from('MaintenanceTicket').insert([{
+    branchId: 1, 
+    customerId: customer?.id, 
+    deviceType: data.deviceModel,
+    issue: data.issueDescription, 
+    cost: data.estimatedCost || 0, 
+    status: 'PENDING'
   }]);
   if (error) return { success: false, error: "حدث خطأ أثناء إنشاء تذكرة الصيانة." };
   revalidatePath("/dashboard");

@@ -108,7 +108,7 @@ export default function InventoryPanel() {
                       </div>
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <span style={{ fontWeight: "800", fontSize: "1.05rem" }}>{item.name}</span>
-                        <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>ID: {item.id.slice(0, 8)}</span>
+                        <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>ID: {item.id?.toString().slice(0, 8) || 'N/A'}</span>
                       </div>
                     </div>
                   </td>

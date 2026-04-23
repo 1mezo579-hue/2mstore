@@ -45,7 +45,7 @@ export default function POSPanel() {
     }));
   };
 
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
 
   const handleCheckout = async () => {
     if (cart.length === 0) return;
@@ -104,7 +104,7 @@ export default function POSPanel() {
                 </div>
                 <h3 style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "15px" }}>{item.name}</h3>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,0.03)", padding: "10px 15px", borderRadius: "100px" }}>
-                   <span style={{ fontSize: "1.3rem", fontWeight: "900", color: "var(--ps-primary)" }}>{item.price} <small style={{ fontSize: "0.7rem" }}>ج.م</small></span>
+                   <span style={{ fontSize: "1.3rem", fontWeight: "900", color: "var(--ps-primary)" }}>{(item.price || 0).toLocaleString()} <small style={{ fontSize: "0.7rem" }}>ج.م</small></span>
                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--ps-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem", fontWeight: "bold", boxShadow: "0 0 10px var(--ps-primary-glow)" }}>+</div>
                 </div>
               </div>
