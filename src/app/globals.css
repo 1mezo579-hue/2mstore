@@ -227,6 +227,7 @@ body::before {
   letter-spacing: -1.5px;
   background: linear-gradient(to right, #FFF, #A0AABF);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
