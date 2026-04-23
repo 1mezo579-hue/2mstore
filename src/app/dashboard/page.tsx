@@ -7,7 +7,6 @@ import {
   Package, 
   ShoppingCart, 
   Wrench, 
-  FileText, 
   Store,
   Settings,
   Bell,
@@ -27,6 +26,7 @@ import MaintenancePanel from "@/components/MaintenancePanel";
 import BranchesPanel from "@/components/BranchesPanel";
 import UsersPanel from "@/components/UsersPanel";
 import SettingsPanel from "@/components/SettingsPanel";
+import ReportsPanel from "@/components/ReportsPanel";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("inventory");
@@ -190,13 +190,7 @@ export default function Dashboard() {
             {activeTab === "inventory" && <InventoryPanel />}
             {activeTab === "pos" && <POSPanel />}
             {activeTab === "maintenance" && <MaintenancePanel />}
-            {activeTab === "reports" && (
-              <div className="card" style={{ textAlign: "center", padding: "100px" }}>
-                <FileText size={80} style={{ color: "var(--ps-primary)", opacity: 0.3, marginBottom: "30px" }} />
-                <h2 style={{ fontSize: "2rem", fontWeight: "900" }}>جاري العمل على قسم التقارير...</h2>
-                <p style={{ color: "var(--text-soft)", marginTop: "10px" }}>سنقوم بإطلاق هذا القسم قريباً لتوفير تحليلات دقيقة لمتجرك.</p>
-              </div>
-            )}
+            {activeTab === "reports" && <ReportsPanel />}
             {activeTab === "branches" && <BranchesPanel />}
             {activeTab === "users" && <UsersPanel />}
             {activeTab === "settings" && <SettingsPanel />}
