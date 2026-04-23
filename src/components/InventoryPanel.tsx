@@ -76,6 +76,8 @@ export default function InventoryPanel() {
     price: 0,
     quantity: 0,
   });
+  const [isCustomName, setIsCustomName] = useState(false);
+  const [customNameValue, setCustomNameValue] = useState("");
 
   const fetchItems = async () => {
     setIsLoading(true);
@@ -89,6 +91,8 @@ export default function InventoryPanel() {
   const openAddModal = () => {
     setEditingItem(null);
     setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
+    setIsCustomName(false);
+    setCustomNameValue("");
     setIsModalOpen(true);
   };
 
@@ -100,23 +104,38 @@ export default function InventoryPanel() {
       price: Number(item.price) || 0,
       quantity: Number(item.quantity) || 0,
     });
+    setIsCustomName(false);
+    setCustomNameValue("");
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    const finalData = {
+      ...formData,
+      name: isCustomName ? customNameValue : formData.name
+    };
+    
+    if (!finalData.name) {
+      alert("يرجى إدخال اسم المنتج");
+      setSubmitting(false);
+      return;
+    }
+
     let res;
     if (editingItem) {
-      res = await updateInventoryItem(editingItem.id, formData);
+      res = await updateInventoryItem(editingItem.id, finalData);
     } else {
-      res = await addInventoryItem(formData);
+      res = await addInventoryItem(finalData);
     }
     setSubmitting(false);
     if (res.success) {
       setIsModalOpen(false);
       setEditingItem(null);
       setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
+      setIsCustomName(false);
+      setCustomNameValue("");
       fetchItems();
     } else {
       alert(res.error || "حدث خطأ");
@@ -271,8 +290,16 @@ export default function InventoryPanel() {
                   <select
                     required
                     style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}
-                    value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
+                    value={isCustomName ? "__custom__" : formData.name}
+                    onChange={e => {
+                      if (e.target.value === "__custom__") {
+                        setIsCustomName(true);
+                        setFormData({ ...formData, name: "" });
+                      } else {
+                        setIsCustomName(false);
+                        setFormData({ ...formData, name: e.target.value });
+                      }
+                    }}
                   >
                     <option value="" style={{ background: "#0a0f1e" }}>-- اختر المنتج --</option>
                     {productNames.map(name => (
@@ -290,13 +317,14 @@ export default function InventoryPanel() {
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                   />
                 )}
-                {formData.name === "__custom__" && (
+                {isCustomName && (
                   <input
                     type="text"
                     required
-                    placeholder="اكتب اسم المنتج"
+                    placeholder="اكتب اسم المنتج المخصص هنا"
                     style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none", marginTop: "8px" }}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
+                    value={customNameValue}
+                    onChange={e => setCustomNameValue(e.target.value)}
                   />
                 )}
               </div>
@@ -330,7 +358,7 @@ export default function InventoryPanel() {
               <button
                 type="submit"
                 className="btn-liquid btn-liquid-primary"
-                disabled={submitting || !formData.name || formData.name === "__custom__"}
+                disabled={submitting || (!isCustomName && !formData.name) || (isCustomName && !customNameValue)}
                 style={{ width: "100%", marginTop: "10px", padding: "18px", justifyContent: "center", fontSize: "1.1rem" }}
               >
                 {submitting ? "جاري الحفظ..." : editingItem ? "تحديث المنتج" : "حفظ في المستودع"}
