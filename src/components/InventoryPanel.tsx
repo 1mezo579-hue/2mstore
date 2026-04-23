@@ -112,33 +112,50 @@ export default function InventoryPanel() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    const finalData = {
-      ...formData,
-      name: isCustomName ? customNameValue : formData.name
-    };
     
-    if (!finalData.name) {
-      alert("يرجى إدخال اسم المنتج");
+    const finalName = isCustomName ? customNameValue : formData.name;
+    
+    console.log("Submitting Inventory:", { ...formData, name: finalName });
+
+    if (!finalName) {
+      alert("يرجى اختيار أو كتابة اسم المنتج");
       setSubmitting(false);
       return;
     }
 
-    let res;
-    if (editingItem) {
-      res = await updateInventoryItem(editingItem.id, finalData);
-    } else {
-      res = await addInventoryItem(finalData);
-    }
-    setSubmitting(false);
-    if (res.success) {
-      setIsModalOpen(false);
-      setEditingItem(null);
-      setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
-      setIsCustomName(false);
-      setCustomNameValue("");
-      fetchItems();
-    } else {
-      alert(res.error || "حدث خطأ");
+    const payload = {
+      ...formData,
+      name: finalName,
+      // Ensure we have a valid number for price and quantity
+      price: Number(formData.price) || 0,
+      quantity: Number(formData.quantity) || 0,
+    };
+
+    try {
+      let res;
+      if (editingItem) {
+        res = await updateInventoryItem(editingItem.id, payload);
+      } else {
+        res = await addInventoryItem(payload);
+      }
+      
+      console.log("Response:", res);
+
+      if (res.success) {
+        setIsModalOpen(false);
+        setEditingItem(null);
+        setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
+        setIsCustomName(false);
+        setCustomNameValue("");
+        await fetchItems();
+      } else {
+        alert("فشل الحفظ: " + res.error);
+      }
+    } catch (err: any) {
+      console.error("Submit Error:", err);
+      alert("حدث خطأ تقني: " + err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 

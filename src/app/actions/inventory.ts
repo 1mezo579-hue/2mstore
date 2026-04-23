@@ -10,11 +10,38 @@ export async function getInventoryItems() {
 }
 
 export async function addInventoryItem(data: any) {
-  const id = `item_${Date.now()}`;
-  const { error } = await supabase.from('InventoryItem').insert([{ ...data, id, branchId: 1 }]);
-  if (error) return { success: false, error: "حدث خطأ أثناء إضافة الصنف." };
-  revalidatePath("/dashboard");
-  return { success: true };
+  try {
+    const id = `item_${Date.now()}`;
+    
+    // First, try to get a valid branchId if none is provided
+    let branchId = data.branchId;
+    if (!branchId) {
+      const { data: branches } = await supabase.from('Branch').select('id').limit(1);
+      if (branches && branches.length > 0) {
+        branchId = branches[0].id;
+      } else {
+        // Fallback to 1 but this might still fail if DB constraints are strict
+        branchId = 1;
+      }
+    }
+
+    const { error } = await supabase.from('InventoryItem').insert([{ 
+      ...data, 
+      id, 
+      branchId 
+    }]);
+    
+    if (error) {
+      console.error("Supabase Inventory Insert Error:", error);
+      return { success: false, error: `فشل الحفظ: ${error.message} (BranchID: ${branchId})` };
+    }
+    
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (e: any) {
+    console.error("Inventory Add Catch:", e);
+    return { success: false, error: e.message || "حدث خطأ غير متوقع" };
+  }
 }
 
 export async function updateInventoryItem(id: string, data: any) {
