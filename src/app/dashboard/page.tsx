@@ -185,21 +185,6 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
-
-      <style jsx>{`
-        .sidebar-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .logout:hover {
-          background: rgba(255, 77, 109, 0.1) !important;
-        }
-        .flex { display: flex; }
-        .items-center { align-items: center; }
-        .gap-4 { gap: 16px; }
-        .gap-8 { gap: 32px; }
-      `}</style>
     </div>
   );
 }
