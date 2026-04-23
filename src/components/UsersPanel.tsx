@@ -234,7 +234,10 @@ export default function UsersPanel() {
                           }}
                         >
                            <div style={{ color: formData.role === r ? roleConfig[r as Role].color : "inherit" }}>
-                              {React.createElement(roleConfig[r as Role].icon, { size: 18 })}
+                              {(() => {
+                                const Icon = roleConfig[r as Role].icon;
+                                return <Icon size={18} />;
+                              })()}
                            </div>
                            <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>{roleConfig[r as Role].label}</span>
                         </div>

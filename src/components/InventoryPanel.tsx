@@ -140,6 +140,7 @@ export default function InventoryPanel() {
         </div>
       </div>
 
+      {isModalOpen && (
         <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
           <div className="card animate-liquid" style={{ width: "95%", maxWidth: "550px", borderTop: "4px solid var(--ps-primary)" }}>
              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px" }}>

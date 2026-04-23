@@ -141,30 +141,34 @@ export default function MaintenancePanel() {
                     </td>
                     <td>
                       <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "8px", fontSize: "0.9rem", fontWeight: "900", background: `${config.color}15`, padding: "6px 15px", borderRadius: "100px", width: "fit-content" }}>
-                         {React.createElement(config.icon, { size: 14 })}
+                         <config.icon size={14} />
                          {config.label}
                       </div>
                     </td>
                     <td><div style={{ fontSize: "0.85rem", color: "var(--text-dim)", fontWeight: "600" }}><Calendar size={14} style={{ verticalAlign: "middle", marginLeft: "5px" }} /> {new Date(ticket.createdAt).toLocaleDateString('ar-EG')}</div></td>
                     <td>
                       <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                        {Object.keys(statusConfig).map(s => (
-                          <button 
-                            key={s}
-                            onClick={() => handleStatusChange(ticket.id, s)}
-                            className="btn-liquid"
-                            style={{ 
-                              padding: "10px", 
-                              borderRadius: "12px", 
-                              background: ticket.status === s ? statusConfig[s as keyof typeof statusConfig].color : "rgba(255,255,255,0.05)",
-                              border: "none",
-                              color: ticket.status === s ? "black" : "white",
-                              opacity: ticket.status === s ? 1 : 0.3
-                            }}
-                          >
-                             {React.createElement(statusConfig[s as keyof typeof statusConfig].icon, { size: 16 })}
-                          </button>
-                        ))}
+                        {Object.keys(statusConfig).map(s => {
+                          const config = statusConfig[s as keyof typeof statusConfig];
+                          const Icon = config.icon;
+                          return (
+                            <button 
+                              key={s}
+                              onClick={() => handleStatusChange(ticket.id, s)}
+                              className="btn-liquid"
+                              style={{ 
+                                padding: "10px", 
+                                borderRadius: "12px", 
+                                background: ticket.status === s ? config.color : "rgba(255,255,255,0.05)",
+                                border: "none",
+                                color: ticket.status === s ? "black" : "white",
+                                opacity: ticket.status === s ? 1 : 0.3
+                              }}
+                            >
+                               <Icon size={16} />
+                            </button>
+                          );
+                        })}
                       </div>
                     </td>
                   </tr>
