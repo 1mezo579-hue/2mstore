@@ -35,6 +35,27 @@
   filter: blur(80px);
 }
 
+.loginCard {
+  background: var(--ps-surface);
+  backdrop-filter: blur(40px);
+  padding: 60px;
+  border-radius: 40px;
+  width: 480px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  animation: login-fade 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 10;
+}
+
+@media (max-width: 500px) {
+  .loginCard {
+    width: 90%;
+    padding: 40px 30px;
+  }
+}
+
 .loginBox {
   width: 100%;
   max-width: 420px;

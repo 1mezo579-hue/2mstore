@@ -271,11 +271,89 @@ body::before {
   border-color: rgba(0, 114, 255, 0.2);
 }
 
+/* Mobile Support & Responsive Design */
+@media (max-width: 1024px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    right: -320px;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: -20px 0 50px rgba(0,0,0,0.8);
+    border-left: none;
+    border-right: var(--glass-border);
+  }
+
+  .sidebar.open {
+    right: 0;
+  }
+
+  .top-header {
+    padding: 0 20px;
+  }
+
+  .header-search {
+    width: 250px !important;
+  }
+
+  .content-area {
+    padding: 20px;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-search {
+    display: none !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .overview-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .user-profile span {
+    display: none;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .liquid-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .pos-layout {
+    grid-template-columns: 1fr !important;
+    overflow-y: auto;
+  }
+
+  .modal-overlay .card {
+    width: 95% !important;
+    padding: 20px;
+  }
+}
+
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--ps-primary); }
 
 /* Animation Utils */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.animate-liquid { animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.animate-liquid { animation: fadeIn 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards; }

@@ -177,7 +177,7 @@ export default function MaintenancePanel() {
 
       {isModalOpen && (
         <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-          <div className="card animate-liquid" style={{ width: "600px" }}>
+          <div className="card animate-liquid" style={{ width: "95%", maxWidth: "600px" }}>
              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px" }}>
                 <div>
                    <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>فتح تذكرة صيانة</h3>
