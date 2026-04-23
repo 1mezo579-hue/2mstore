@@ -7,6 +7,7 @@ import { getInventoryItems, addInventoryItem, deleteInventoryItem } from "@/app/
 export default function InventoryPanel() {
   const [items, setItems] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   
@@ -16,6 +17,18 @@ export default function InventoryPanel() {
     price: 0,
     quantity: 0
   });
+
+  const openAddModal = () => {
+    setEditingItem(null);
+    setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (item: any) => {
+    setEditingItem(item);
+    setFormData({ name: item.name, category: item.category, price: item.price, quantity: item.quantity });
+    setIsModalOpen(true);
+  };
 
   const fetchItems = async () => {
     setIsLoading(true);
@@ -60,7 +73,7 @@ export default function InventoryPanel() {
           </div>
           <h1 className="page-title">إدارة المخزون</h1>
         </div>
-        <button className="btn-liquid btn-liquid-primary" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-liquid btn-liquid-primary" onClick={openAddModal}>
           <Plus size={20} /> إضافة منتج جديد
         </button>
       </div>
@@ -129,7 +142,7 @@ export default function InventoryPanel() {
                   </td>
                   <td>
                     <div style={{ display: "flex", justifyContent: "center", gap: "12px" }}>
-                      <button className="btn-liquid" style={{ padding: "10px", borderRadius: "12px" }}><Edit size={18} /></button>
+                      <button className="btn-liquid" onClick={() => openEditModal(item)} style={{ padding: "10px", borderRadius: "12px" }}><Edit size={18} /></button>
                       <button className="btn-liquid" style={{ padding: "10px", borderRadius: "12px", color: "var(--neon-circle)" }} onClick={() => handleDelete(item.id)}><Trash2 size={18} /></button>
                     </div>
                   </td>
@@ -145,8 +158,8 @@ export default function InventoryPanel() {
           <div className="card animate-liquid" style={{ width: "95%", maxWidth: "550px", borderTop: "4px solid var(--ps-primary)" }}>
              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px" }}>
                 <div>
-                   <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>إضافة صنف جديد</h3>
-                   <p style={{ color: "var(--text-dim)", fontSize: "0.9rem" }}>أدخل تفاصيل المنتج ليتم إدراجه في النظام</p>
+                   <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>{editingItem ? "تعديل بيانات المنتج" : "إضافة صنف جديد"}</h3>
+                   <p style={{ color: "var(--text-dim)", fontSize: "0.9rem" }}>{editingItem ? "قم بتحديث بيانات المنتج المسجل" : "أدخل تفاصيل المنتج ليتم إدراجه في النظام"}</p>
                 </div>
                 <button onClick={() => setIsModalOpen(false)} style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white", padding: "10px", borderRadius: "12px", cursor: "pointer" }}><X size={24}/></button>
              </div>
@@ -180,7 +193,9 @@ export default function InventoryPanel() {
                     <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الكمية المتاحة</label>
                     <input type="number" required style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} />
                  </div>
-                <button type="submit" className="btn-liquid btn-liquid-primary" style={{ width: "100%", marginTop: "15px", padding: "18px", justifyContent: "center", fontSize: "1.1rem" }}>حفظ في المستودع</button>
+                <button type="submit" className="btn-liquid btn-liquid-primary" style={{ width: "100%", marginTop: "15px", padding: "18px", justifyContent: "center", fontSize: "1.1rem" }}>
+                  {editingItem ? "تحديث في المستودع" : "حفظ في المستودع"}
+                </button>
              </form>
           </div>
         </div>
