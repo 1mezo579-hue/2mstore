@@ -66,8 +66,8 @@ export default function POSPanel() {
   };
 
   const filteredItems = items.filter(i => 
-    i.name.toLowerCase().includes(search.toLowerCase()) || 
-    i.category.toLowerCase().includes(search.toLowerCase())
+    (i.name || "").toLowerCase().includes((search || "").toLowerCase()) || 
+    (i.category || "").toLowerCase().includes((search || "").toLowerCase())
   );
 
   return (

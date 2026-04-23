@@ -63,8 +63,8 @@ export default function MaintenancePanel() {
   };
 
   const filteredTickets = tickets.filter(t => 
-    t.customerName.toLowerCase().includes(search.toLowerCase()) || 
-    t.deviceModel.toLowerCase().includes(search.toLowerCase())
+    (t.customerName || "").toLowerCase().includes((search || "").toLowerCase()) || 
+    (t.deviceModel || "").toLowerCase().includes((search || "").toLowerCase())
   );
 
   return (

@@ -46,8 +46,8 @@ export default function InventoryPanel() {
   };
 
   const filteredItems = items.filter(i => 
-    i.name.toLowerCase().includes(search.toLowerCase()) || 
-    i.category.toLowerCase().includes(search.toLowerCase())
+    (i.name || "").toLowerCase().includes((search || "").toLowerCase()) || 
+    (i.category || "").toLowerCase().includes((search || "").toLowerCase())
   );
 
   return (
@@ -79,7 +79,7 @@ export default function InventoryPanel() {
           </div>
           <div style={{ display: "flex", gap: "20px", fontSize: "0.85rem", color: "var(--text-dim)" }}>
              <span>إجمالي الأصناف: <strong style={{ color: "white" }}>{items.length}</strong></span>
-             <span>القيمة الإجمالية: <strong style={{ color: "var(--ps-primary)" }}>{items.reduce((s, i) => s + (i.price * i.quantity), 0).toLocaleString()} ج.م</strong></span>
+             <span>القيمة الإجمالية: <strong style={{ color: "var(--ps-primary)" }}>{items.reduce((s, i) => s + ((Number(i.price) || 0) * (Number(i.quantity) || 0)), 0).toLocaleString()} ج.م</strong></span>
           </div>
         </div>
 
@@ -113,7 +113,7 @@ export default function InventoryPanel() {
                     </div>
                   </td>
                   <td><span className="ps-tag">{item.category}</span></td>
-                  <td><span style={{ fontWeight: "900", color: "var(--ps-primary)", fontSize: "1.1rem" }}>{item.price.toLocaleString()} <small style={{ fontSize: "0.7rem", opacity: 0.6 }}>ج.م</small></span></td>
+                  <td><span style={{ fontWeight: "900", color: "var(--ps-primary)", fontSize: "1.1rem" }}>{(Number(item.price) || 0).toLocaleString()} <small style={{ fontSize: "0.7rem", opacity: 0.6 }}>ج.م</small></span></td>
                   <td>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <span style={{ 
