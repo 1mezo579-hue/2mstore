@@ -20,7 +20,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await authenticateAdmin(username, password);
+      const res: any = await authenticateAdmin(username, password);
       if (res.success) {
         // Redirection logic
         if (res.user.role === "MAINTENANCE") router.push("/dashboard?tab=maintenance");

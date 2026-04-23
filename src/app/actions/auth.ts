@@ -9,7 +9,7 @@ export async function authenticateAdmin(username: string, password?: string) {
     const cookieStore = await cookies();
     cookieStore.set("admin_auth", "true", { path: "/", maxAge: 60 * 60 * 24 * 7 });
     cookieStore.set("user_data", JSON.stringify({ id: 'master', name: 'إسلام (الأونر)', role: 'OWNER' }), { path: "/", maxAge: 60 * 60 * 24 * 7 });
-    return { success: true };
+    return { success: true, user: { id: 'master', name: 'إسلام (الأونر)', role: 'OWNER' } };
   }
 
   // 2. Supabase login
@@ -27,7 +27,7 @@ export async function authenticateAdmin(username: string, password?: string) {
     const cookieStore = await cookies();
     cookieStore.set("admin_auth", "true", { path: "/", maxAge: 60 * 60 * 24 * 7 });
     cookieStore.set("user_data", JSON.stringify({ id: user.id, name: user.name, role: user.role }), { path: "/", maxAge: 60 * 60 * 24 * 7 });
-    return { success: true };
+    return { success: true, user: { id: user.id, name: user.name, role: user.role } };
   } catch (error) {
     console.error("Auth error:", error);
     return { success: false, error: "خطأ في الاتصال بالسيرفر." };
