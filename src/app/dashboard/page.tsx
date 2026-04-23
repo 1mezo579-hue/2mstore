@@ -80,9 +80,9 @@ export default function Dashboard() {
     <div className="app-container">
       {/* Floating Background Symbols */}
       <div className="bg-symbols">
-        <span className="floating-symbol" style={{ width: "100px", height: "100px", top: "10%", left: "5%", color: "var(--neon-triangle)", maskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M12 4L4 20H20L12 4Z\' stroke=\'black\' fill=\'none\' stroke-width=\'2\'/%3E%3C/svg%3E")', WebkitMaskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M12 4L4 20H20L12 4Z\' stroke=\'black\' fill=\'none\' stroke-width=\'2\'/%3E%3C/svg%3E")' }}></span>
-        <span className="floating-symbol" style={{ width: "80px", height: "80px", top: "60%", right: "10%", color: "var(--neon-circle)", maskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'8\' stroke=\'black\' fill=\'none\' stroke-width=\'2\'/%3E%3C/svg%3E")', WebkitMaskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'8\' stroke=\'black\' fill=\'none\' stroke-width=\'2\'/%3E%3C/svg%3E")', animationDelay: "-5s" }}></span>
-        <span className="floating-symbol" style={{ width: "120px", height: "120px", bottom: "5%", left: "15%", color: "var(--neon-x)", maskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M6 6L18 18M18 6L6 18\' stroke=\'black\' fill=\'none\' stroke-width=\'2\'/%3E%3C/svg%3E")', WebkitMaskImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M6 6L18 18M18 6L6 18\' stroke=\'black\' fill=\'none\' stroke-width=\'2\'/%3E%3C/svg%3E")', animationDelay: "-10s" }}></span>
+        <span className="floating-symbol symbol-triangle"></span>
+        <span className="floating-symbol symbol-circle"></span>
+        <span className="floating-symbol symbol-x"></span>
       </div>
 
       {/* Sidebar */}

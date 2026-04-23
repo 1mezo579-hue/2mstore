@@ -5,10 +5,10 @@ import { ShoppingCart, Wrench, Package, TrendingUp, Users, DollarSign, Activity,
 
 export default function DashboardOverview() {
   const stats = [
-    { label: "المبيعات اليومية", value: "1,250 ج.م", icon: <DollarSign size={28} />, color: "var(--ps-primary)", trend: "+12%", bg: "rgba(0, 114, 255, 0.1)" },
-    { label: "طلبات الصيانة", value: "8", icon: <Wrench size={28} />, color: "var(--neon-triangle)", trend: "5 قيد العمل", bg: "rgba(0, 255, 204, 0.1)" },
-    { label: "المنتجات بالمخزن", value: "142", icon: <Package size={28} />, color: "var(--neon-square)", trend: "12 نفذت", bg: "rgba(209, 97, 255, 0.1)" },
-    { label: "العملاء الجدد", value: "24", icon: <Users size={28} />, color: "var(--neon-circle)", trend: "+4 اليوم", bg: "rgba(255, 77, 109, 0.1)" },
+    { label: "المبيعات اليومية", value: "1,250 ج.م", Icon: DollarSign, color: "var(--ps-primary)", trend: "+12%", bg: "rgba(0, 114, 255, 0.1)" },
+    { label: "طلبات الصيانة", value: "8", Icon: Wrench, color: "var(--neon-triangle)", trend: "5 قيد العمل", bg: "rgba(0, 255, 204, 0.1)" },
+    { label: "المنتجات بالمخزن", value: "142", Icon: Package, color: "var(--neon-square)", trend: "12 نفذت", bg: "rgba(209, 97, 255, 0.1)" },
+    { label: "العملاء الجدد", value: "24", Icon: Users, color: "var(--neon-circle)", trend: "+4 اليوم", bg: "rgba(255, 77, 109, 0.1)" },
   ];
 
   return (
@@ -26,7 +26,7 @@ export default function DashboardOverview() {
           <div key={i} className="card" style={{ borderBottom: `4px solid ${stat.color}` }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <div style={{ background: stat.bg, color: stat.color, padding: "14px", borderRadius: "18px", boxShadow: `0 0 15px ${stat.color}30` }}>
-                {stat.icon}
+                <stat.Icon size={28} />
               </div>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                  <span style={{ fontSize: "0.85rem", color: stat.color, fontWeight: "900" }}>{stat.trend}</span>
