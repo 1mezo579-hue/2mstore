@@ -11,20 +11,18 @@ import {
   Trash2, 
   Edit2, 
   X, 
-  Check,
   RefreshCw,
-  MoreVertical,
-  Plus
+  MoreVertical
 } from "lucide-react";
 import { getUsers, createUser, updateUser, deleteUser } from "@/app/actions/users";
 
 type Role = 'OWNER' | 'MANAGER' | 'MAINTENANCE' | 'SELLER';
 
 const roleConfig = {
-  OWNER: { label: "أونر", icon: ShieldCheck, color: "var(--clr-triangle)" },
+  OWNER: { label: "أونر", icon: ShieldCheck, color: "var(--neon-triangle)" },
   MANAGER: { label: "مدير", icon: Shield, color: "var(--ps-primary)" },
-  MAINTENANCE: { label: "مسئول صيانة", icon: Wrench, color: "var(--clr-square)" },
-  SELLER: { label: "بائع", icon: ShoppingCart, color: "var(--clr-circle)" },
+  MAINTENANCE: { label: "مسئول صيانة", icon: Wrench, color: "var(--neon-square)" },
+  SELLER: { label: "بائع", icon: ShoppingCart, color: "var(--neon-circle)" },
 };
 
 export default function UsersPanel() {
@@ -112,124 +110,138 @@ export default function UsersPanel() {
   };
 
   return (
-    <div className="users-panel">
-      <div className="page-header flex-between">
+    <div className="users-panel animate-liquid">
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
         <div>
-          <span className="section-label">فريق العمل</span>
-          <h1 className="page-title">إدارة المستخدمين</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+             <Users size={20} color="var(--ps-primary)" />
+             <span className="section-label" style={{ margin: 0 }}>إدارة الكوادر</span>
+          </div>
+          <h1 className="page-title">فريق العمل</h1>
         </div>
-        <button className="btn-sweet btn-sweet-primary" onClick={() => {
+        <button className="btn-liquid btn-liquid-primary" onClick={() => {
             setEditingUser(null);
             setFormData({ name: "", username: "", password: "", role: "SELLER" });
             setIsModalOpen(true);
           }}>
-          <UserPlus size={20} /> إضافة مستخدم جديد
+          <UserPlus size={20} /> إضافة عضو جديد
         </button>
       </div>
 
-      <div className="card animate-sweet" style={{ marginTop: "30px", padding: "0" }}>
-        <div style={{ padding: "20px 30px", borderBottom: "var(--border-glass)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h3 style={{ fontSize: "1.1rem" }}>قائمة المستخدمين ({users.length})</h3>
-          <button className="btn-sweet" onClick={fetchUsers} disabled={isLoading} style={{ padding: "8px" }}>
-            <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
+      <div className="card" style={{ padding: "0" }}>
+        <div style={{ padding: "25px 30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h3 style={{ fontSize: "1.4rem", fontWeight: "800" }}>المستخدمين ({users.length})</h3>
+          <button className="btn-liquid" onClick={fetchUsers} disabled={isLoading} style={{ padding: "10px" }}>
+            <RefreshCw size={18} className={isLoading ? "animate-spin" : ""} />
           </button>
         </div>
 
-        <table className="sweet-table">
-          <thead>
-            <tr>
-              <th>المستخدم</th>
-              <th>الرتبة</th>
-              <th>اسم الدخول</th>
-              <th style={{ textAlign: "center" }}>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading && users.length === 0 ? (
-              <tr><td colSpan={4} style={{ textAlign: "center", padding: "40px", opacity: 0.3 }}>جاري التحميل...</td></tr>
-            ) : users.length === 0 ? (
-              <tr><td colSpan={4} style={{ textAlign: "center", padding: "100px", color: "var(--text-dim)" }}>لا يوجد مستخدمين مسجلين</td></tr>
-            ) : users.map((user) => {
-              const config = roleConfig[user.role as Role] || roleConfig.SELLER;
-              const RoleIcon = config.icon;
-              return (
-                <tr key={user.id}>
-                  <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                       <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: `${config.color}15`, color: config.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
-                          {user.name.charAt(0).toUpperCase()}
-                       </div>
-                       <span style={{ fontWeight: "600" }}>{user.name}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", fontWeight: "600", background: "rgba(255,255,255,0.02)", padding: "4px 12px", borderRadius: "50px", width: "fit-content" }}>
-                       <RoleIcon size={14} />
-                       {config.label}
-                    </div>
-                  </td>
-                  <td><span style={{ color: "var(--text-dim)", fontFamily: "monospace" }}>@{user.username}</span></td>
-                  <td>
-                    <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                      <button className="btn-sweet" style={{ padding: "8px", borderRadius: "10px" }} onClick={() => handleEdit(user)}><Edit2 size={16} /></button>
-                      <button className="btn-sweet" style={{ padding: "8px", borderRadius: "10px", color: "#ff4444" }} onClick={() => handleDelete(user.id)}><Trash2 size={16} /></button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div style={{ padding: "0 20px" }}>
+          <table className="liquid-table">
+            <thead>
+              <tr>
+                <th>المستخدم</th>
+                <th>الصلاحية</th>
+                <th>اسم الدخول</th>
+                <th style={{ textAlign: "center" }}>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading && users.length === 0 ? (
+                [1,2,3].map(i => <tr key={i}><td colSpan={4} style={{ textAlign: "center", padding: "40px", opacity: 0.1 }}>جاري التحميل...</td></tr>)
+              ) : users.length === 0 ? (
+                <tr><td colSpan={4} style={{ textAlign: "center", padding: "100px", color: "var(--text-dim)" }}>لا يوجد مستخدمين مسجلين</td></tr>
+              ) : users.map((user) => {
+                const config = roleConfig[user.role as Role] || roleConfig.SELLER;
+                const RoleIcon = config.icon;
+                return (
+                  <tr key={user.id}>
+                    <td>
+                      <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                         <div style={{ width: "45px", height: "45px", borderRadius: "15px", background: `${config.color}20`, color: config.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "900", fontSize: "1.2rem", boxShadow: `0 0 15px ${config.color}30` }}>
+                            {user.name.charAt(0).toUpperCase()}
+                         </div>
+                         <div style={{ display: "flex", flexDirection: "column" }}>
+                            <span style={{ fontWeight: "800", fontSize: "1.05rem" }}>{user.name}</span>
+                            <span style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>عضو نشط منذ فترة</span>
+                         </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "10px", fontSize: "0.85rem", fontWeight: "900", background: "rgba(255,255,255,0.03)", padding: "6px 15px", borderRadius: "100px", width: "fit-content" }}>
+                         <RoleIcon size={14} />
+                         {config.label}
+                      </div>
+                    </td>
+                    <td><span style={{ color: "var(--ps-primary)", fontFamily: "monospace", fontWeight: "700" }}>@{user.username}</span></td>
+                    <td>
+                      <div style={{ display: "flex", justifyContent: "center", gap: "12px" }}>
+                        <button className="btn-liquid" style={{ padding: "10px", borderRadius: "12px" }} onClick={() => handleEdit(user)}><Edit2 size={18} /></button>
+                        <button className="btn-liquid" style={{ padding: "10px", borderRadius: "12px", color: "var(--neon-circle)" }} onClick={() => handleDelete(user.id)}><Trash2 size={18} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-          <div className="card animate-sweet" style={{ width: "500px" }}>
-             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "30px" }}>
-                <h3 style={{ fontSize: "1.5rem" }}>{editingUser ? "تعديل مستخدم" : "إضافة مستخدم جديد"}</h3>
-                <button onClick={() => setIsModalOpen(false)} style={{ background: "none", border: "none", color: "white", cursor: "pointer" }}><X size={24}/></button>
+        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+          <div className="card animate-liquid" style={{ width: "550px" }}>
+             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px" }}>
+                <div>
+                   <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>{editingUser ? "تعديل عضو" : "إضافة عضو جديد"}</h3>
+                   <p style={{ color: "var(--text-dim)", fontSize: "0.9rem" }}>إدارة صلاحيات الوصول لنظام 2M Store</p>
+                </div>
+                <button onClick={() => setIsModalOpen(false)} style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white", padding: "10px", borderRadius: "12px", cursor: "pointer" }}><X size={28}/></button>
              </div>
-             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>الاسم الكامل</label>
-                  <input type="text" required style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>الاسم الكامل</label>
+                  <input type="text" required style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
-                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>اسم المستخدم</label>
-                      <input type="text" required style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} value={formData.username} onChange={e => setFormData({...formData, username: e.target.value})} />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>اسم المستخدم</label>
+                      <input type="text" required style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.username} onChange={e => setFormData({...formData, username: e.target.value})} />
                    </div>
-                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>كلمة المرور</label>
-                      <input type="password" required={!editingUser} style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} />
+                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>كلمة المرور</label>
+                      <input type="password" required={!editingUser} style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} />
                    </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                   <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>الصلاحية</label>
-                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                   <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>صلاحية الوصول</label>
+                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                       {Object.keys(roleConfig).map(r => (
                         <div 
                           key={r} 
                           onClick={() => setFormData({...formData, role: r as Role})}
                           style={{ 
-                            padding: "12px", 
-                            borderRadius: "12px", 
-                            background: formData.role === r ? "var(--ps-surface-light)" : "transparent",
+                            padding: "15px", 
+                            borderRadius: "15px", 
+                            background: formData.role === r ? "rgba(0,114,255,0.1)" : "rgba(255,255,255,0.02)",
                             border: formData.role === r ? `1px solid ${roleConfig[r as Role].color}` : "1px solid rgba(255,255,255,0.05)",
                             cursor: "pointer",
                             display: "flex",
                             alignItems: "center",
-                            gap: "10px",
-                            color: formData.role === r ? roleConfig[r as Role].color : "var(--text-dim)"
+                            gap: "12px",
+                            color: formData.role === r ? "white" : "var(--text-dim)",
+                            transition: "all 0.3s"
                           }}
                         >
-                           {React.createElement(roleConfig[r as Role].icon, { size: 16 })}
-                           <span style={{ fontSize: "0.85rem" }}>{roleConfig[r as Role].label}</span>
+                           <div style={{ color: formData.role === r ? roleConfig[r as Role].color : "inherit" }}>
+                              {React.createElement(roleConfig[r as Role].icon, { size: 18 })}
+                           </div>
+                           <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>{roleConfig[r as Role].label}</span>
                         </div>
                       ))}
                    </div>
                 </div>
-                <button type="submit" className="btn-sweet btn-sweet-primary" style={{ width: "100%", marginTop: "10px" }}>{editingUser ? "تحديث" : "إنشاء"}</button>
+                <button type="submit" className="btn-liquid btn-liquid-primary" style={{ width: "100%", marginTop: "15px", padding: "18px", justifyContent: "center" }}>{editingUser ? "تحديث البيانات" : "إتمام الإضافة"}</button>
              </form>
           </div>
         </div>

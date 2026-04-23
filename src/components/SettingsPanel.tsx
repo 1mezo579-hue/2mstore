@@ -1,79 +1,106 @@
 "use client";
 
 import React, { useState } from "react";
-import { Settings, Save, Globe, Lock, Bell, Database, HardDrive, Smartphone, Monitor } from "lucide-react";
+import { Settings, Save, Globe, Lock, Bell, Database, HardDrive, Smartphone, Monitor, Shield, Zap } from "lucide-react";
 
 export default function SettingsPanel() {
   const [activeSetting, setActiveSetting] = useState("general");
 
   const settingsTabs = [
     { id: "general", label: "إعدادات عامة", icon: Globe },
-    { id: "security", label: "الأمان", icon: Lock },
+    { id: "security", label: "الأمان والحماية", icon: Shield },
     { id: "notifications", label: "التنبيهات", icon: Bell },
     { id: "database", label: "قاعدة البيانات", icon: Database },
   ];
 
   return (
-    <div className="settings-panel">
-      <div className="page-header">
-        <span className="section-label">التكوين</span>
+    <div className="settings-panel animate-liquid">
+      <div className="page-header" style={{ marginBottom: "40px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+           <Settings size={20} color="var(--ps-primary)" />
+           <span className="section-label" style={{ margin: 0 }}>التكوين البرمجي</span>
+        </div>
         <h1 className="page-title">إعدادات النظام</h1>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "250px 1fr", gap: "30px", marginTop: "30px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: "40px" }}>
         {/* Settings Navigation */}
-        <div className="card" style={{ padding: "10px" }}>
+        <div className="card" style={{ padding: "15px", height: "fit-content" }}>
           {settingsTabs.map(tab => (
             <div 
               key={tab.id}
               onClick={() => setActiveSetting(tab.id)}
               style={{ 
-                padding: "15px 20px", 
-                borderRadius: "12px", 
+                padding: "18px 25px", 
+                borderRadius: "100px", 
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                gap: "12px",
-                background: activeSetting === tab.id ? "var(--ps-surface-light)" : "transparent",
+                gap: "15px",
+                background: activeSetting === tab.id ? "rgba(0, 114, 255, 0.1)" : "transparent",
                 color: activeSetting === tab.id ? "white" : "var(--text-dim)",
-                transition: "all 0.2s"
+                border: activeSetting === tab.id ? "1px solid rgba(0, 114, 255, 0.2)" : "1px solid transparent",
+                transition: "all 0.3s",
+                fontWeight: "800"
               }}
             >
-              <tab.icon size={18} color={activeSetting === tab.id ? "var(--ps-primary)" : "currentColor"} />
-              <span style={{ fontWeight: activeSetting === tab.id ? "600" : "normal" }}>{tab.label}</span>
+              <tab.icon size={20} color={activeSetting === tab.id ? "var(--ps-primary)" : "currentColor"} />
+              <span>{tab.label}</span>
             </div>
           ))}
         </div>
 
         {/* Settings Content */}
-        <div className="card animate-sweet">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-             <h2 style={{ fontSize: "1.3rem" }}>{settingsTabs.find(t => t.id === activeSetting)?.label}</h2>
-             <button className="btn-sweet btn-sweet-primary"><Save size={18} /> حفظ التغييرات</button>
+        <div className="card" style={{ borderTop: "4px solid var(--ps-primary)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px" }}>
+             <div>
+                <h2 style={{ fontSize: "1.6rem", fontWeight: "900" }}>{settingsTabs.find(t => t.id === activeSetting)?.label}</h2>
+                <p style={{ color: "var(--text-dim)", fontSize: "0.9rem" }}>تحكم في كيفية عمل النظام وتخصيص تجربتك</p>
+             </div>
+             <button className="btn-liquid btn-liquid-primary"><Save size={20} /> حفظ التعديلات</button>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-               <label style={{ fontSize: "0.95rem", fontWeight: "600" }}>اسم المتجر</label>
-               <input type="text" defaultValue="2M Store" style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "35px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+               <label style={{ fontSize: "1rem", fontWeight: "800", color: "var(--text-soft)" }}>اسم المتجر الرسمي</label>
+               <input type="text" defaultValue="2M Store - المركز الرئيسي" style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", fontSize: "1rem", outline: "none" }} />
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-               <label style={{ fontSize: "0.95rem", fontWeight: "600" }}>العملة الافتراضية</label>
-               <select style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }}>
-                  <option>جنيه مصري (EGP)</option>
-                  <option>دولار أمريكي (USD)</option>
-               </select>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "25px" }}>
+               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <label style={{ fontSize: "1rem", fontWeight: "800", color: "var(--text-soft)" }}>اللغة الافتراضية</label>
+                  <select style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}>
+                     <option>العربية (Arabic)</option>
+                     <option>English (الإنجليزية)</option>
+                  </select>
+               </div>
+               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <label style={{ fontSize: "1rem", fontWeight: "800", color: "var(--text-soft)" }}>العملة</label>
+                  <select style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}>
+                     <option>جنيه مصري (EGP)</option>
+                     <option>دولار أمريكي (USD)</option>
+                  </select>
+               </div>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px", background: "rgba(255,255,255,0.02)", borderRadius: "15px" }}>
-               <div>
-                  <div style={{ fontWeight: "600" }}>وضع الصيانة</div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>إغلاق المتجر مؤقتاً لإجراء تحديثات</div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "25px", background: "rgba(255,255,255,0.02)", borderRadius: "25px", border: "1px solid rgba(255,255,255,0.05)" }}>
+               <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+                  <div style={{ background: "rgba(255, 77, 109, 0.1)", padding: "12px", borderRadius: "15px", color: "var(--neon-circle)" }}>
+                     <Zap size={24} />
+                  </div>
+                  <div>
+                     <div style={{ fontWeight: "900", fontSize: "1.1rem" }}>وضع الصيانة الاحترافي</div>
+                     <div style={{ fontSize: "0.85rem", color: "var(--text-dim)" }}>منع الموظفين من الوصول للنظام أثناء التحديثات</div>
+                  </div>
                </div>
-               <div style={{ width: "50px", height: "26px", background: "var(--ps-surface-light)", borderRadius: "50px", position: "relative", cursor: "pointer" }}>
-                  <div style={{ position: "absolute", left: "4px", top: "4px", width: "18px", height: "18px", background: "var(--text-dim)", borderRadius: "50%" }}></div>
+               <div style={{ width: "60px", height: "30px", background: "rgba(255,255,255,0.1)", borderRadius: "100px", position: "relative", cursor: "pointer" }}>
+                  <div style={{ position: "absolute", left: "4px", top: "4px", width: "22px", height: "22px", background: "var(--text-dim)", borderRadius: "50%" }}></div>
                </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "15px", padding: "20px", background: "rgba(0, 114, 255, 0.05)", borderRadius: "15px", border: "1px solid rgba(0, 114, 255, 0.1)", color: "var(--ps-primary)" }}>
+               <HardDrive size={20} />
+               <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>تنبيه: مساحة قاعدة البيانات المتبقية هي 85% - لا توجد مخاطر حالية.</span>
             </div>
           </div>
         </div>

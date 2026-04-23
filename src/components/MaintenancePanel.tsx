@@ -12,16 +12,16 @@ import {
   Phone, 
   Smartphone,
   X,
-  MoreVertical,
-  Calendar
+  Calendar,
+  Tool
 } from "lucide-react";
 import { getMaintenanceTickets, createMaintenanceTicket, updateTicketStatus } from "@/app/actions/maintenance";
 
 const statusConfig = {
-  PENDING: { label: "قيد الانتظار", color: "var(--clr-circle)", icon: Clock },
+  PENDING: { label: "قيد الانتظار", color: "var(--neon-circle)", icon: Clock },
   REPAIRING: { label: "جاري الإصلاح", color: "var(--ps-primary)", icon: Wrench },
-  COMPLETED: { label: "تم الإصلاح", color: "var(--clr-triangle)", icon: CheckCircle2 },
-  DELIVERED: { label: "تم التسليم", color: "var(--clr-square)", icon: CheckCircle2 },
+  COMPLETED: { label: "تم الإصلاح", color: "var(--neon-triangle)", icon: CheckCircle2 },
+  DELIVERED: { label: "تم التسليم", color: "white", icon: CheckCircle2 },
 };
 
 export default function MaintenancePanel() {
@@ -69,131 +69,143 @@ export default function MaintenancePanel() {
   );
 
   return (
-    <div className="maintenance-panel">
-      <div className="page-header flex-between">
+    <div className="maintenance-panel animate-liquid">
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
         <div>
-          <span className="section-label">مركز الخدمة</span>
-          <h1 className="page-title">طلبات الصيانة</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+             <Wrench size={20} color="var(--ps-primary)" />
+             <span className="section-label" style={{ margin: 0 }}>ورشة الصيانة</span>
+          </div>
+          <h1 className="page-title">طلبات الخدمة</h1>
         </div>
-        <button className="btn-sweet btn-sweet-primary" onClick={() => setIsModalOpen(true)}>
-          <Plus size={20} /> فتح تذكرة صيانة
+        <button className="btn-liquid btn-liquid-primary" onClick={() => setIsModalOpen(true)}>
+          <Plus size={20} /> فتح تذكرة جديدة
         </button>
       </div>
 
-      <div className="card animate-sweet" style={{ marginTop: "30px", padding: "0" }}>
-        <div style={{ padding: "20px 30px", borderBottom: "var(--border-glass)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ position: "relative", width: "300px" }}>
-            <Search size={18} style={{ position: "absolute", right: "15px", top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
+      <div className="card" style={{ padding: "0" }}>
+        <div style={{ padding: "25px 30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ position: "relative", width: "350px" }}>
+            <Search size={18} style={{ position: "absolute", right: "18px", top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
             <input 
               type="text" 
               placeholder="ابحث عن عميل أو جهاز..." 
-              style={{ width: "100%", padding: "10px 45px 10px 15px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }}
+              style={{ width: "100%", padding: "12px 50px 12px 20px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "100px", color: "white", outline: "none" }}
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
              {Object.keys(statusConfig).map(s => (
-               <div key={s} style={{ fontSize: "0.75rem", color: "var(--text-dim)", background: "rgba(255,255,255,0.02)", padding: "5px 12px", borderRadius: "50px", border: "1px solid rgba(255,255,255,0.05)" }}>
+               <div key={s} className="ps-tag" style={{ color: statusConfig[s as keyof typeof statusConfig].color, background: "rgba(255,255,255,0.02)" }}>
                   {statusConfig[s as keyof typeof statusConfig].label}
                </div>
              ))}
           </div>
         </div>
 
-        <table className="sweet-table">
-          <thead>
-            <tr>
-              <th>العميل</th>
-              <th>الجهاز</th>
-              <th>الحالة</th>
-              <th>التاريخ</th>
-              <th style={{ textAlign: "center" }}>تغيير الحالة</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr><td colSpan={5} style={{ textAlign: "center", padding: "40px", opacity: 0.3 }}>جاري التحميل...</td></tr>
-            ) : filteredTickets.length === 0 ? (
-              <tr><td colSpan={5} style={{ textAlign: "center", padding: "100px", color: "var(--text-dim)" }}>لا توجد تذاكر صيانة</td></tr>
-            ) : filteredTickets.map(ticket => {
-              const config = statusConfig[ticket.status as keyof typeof statusConfig];
-              return (
-                <tr key={ticket.id}>
-                  <td>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <span style={{ fontWeight: "600" }}>{ticket.customerName}</span>
-                      <span style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>{ticket.customerPhone}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                       <Smartphone size={16} color="var(--ps-primary)" />
-                       <span>{ticket.deviceModel}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "6px", fontSize: "0.9rem", fontWeight: "600" }}>
-                       <config.icon size={16} />
-                       {config.label}
-                    </div>
-                  </td>
-                  <td><div style={{ fontSize: "0.85rem", color: "var(--text-dim)" }}><Calendar size={14} style={{ verticalAlign: "middle", marginLeft: "5px" }} /> {new Date(ticket.createdAt).toLocaleDateString('ar-EG')}</div></td>
-                  <td>
-                    <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
-                      {Object.keys(statusConfig).map(s => (
-                        <button 
-                          key={s}
-                          onClick={() => handleStatusChange(ticket.id, s)}
-                          style={{ 
-                            padding: "6px", 
-                            borderRadius: "8px", 
-                            background: ticket.status === s ? statusConfig[s as keyof typeof statusConfig].color : "var(--ps-surface-light)",
-                            border: "none",
-                            color: "white",
-                            cursor: "pointer",
-                            opacity: ticket.status === s ? 1 : 0.3
-                          }}
-                        >
-                           {React.createElement(statusConfig[s as keyof typeof statusConfig].icon, { size: 14 })}
-                        </button>
-                      ))}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div style={{ padding: "0 20px" }}>
+          <table className="liquid-table">
+            <thead>
+              <tr>
+                <th>العميل</th>
+                <th>الجهاز</th>
+                <th>الحالة</th>
+                <th>التاريخ</th>
+                <th style={{ textAlign: "center" }}>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                [1,2,3].map(i => <tr key={i}><td colSpan={5} style={{ textAlign: "center", padding: "40px", opacity: 0.1 }}>جاري التحميل...</td></tr>)
+              ) : filteredTickets.length === 0 ? (
+                <tr><td colSpan={5} style={{ textAlign: "center", padding: "100px", color: "var(--text-dim)" }}>لا توجد تذاكر مسجلة</td></tr>
+              ) : filteredTickets.map(ticket => {
+                const config = statusConfig[ticket.status as keyof typeof statusConfig];
+                return (
+                  <tr key={ticket.id}>
+                    <td>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <span style={{ fontWeight: "800", fontSize: "1.05rem" }}>{ticket.customerName}</span>
+                        <span style={{ fontSize: "0.8rem", color: "var(--text-dim)", display: "flex", alignItems: "center", gap: "5px" }}>
+                           <Phone size={12} /> {ticket.customerPhone}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                         <div style={{ background: "rgba(0,114,255,0.1)", padding: "8px", borderRadius: "10px" }}>
+                            <Smartphone size={18} color="var(--ps-primary)" />
+                         </div>
+                         <span style={{ fontWeight: "600" }}>{ticket.deviceModel}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "8px", fontSize: "0.9rem", fontWeight: "900", background: `${config.color}15`, padding: "6px 15px", borderRadius: "100px", width: "fit-content" }}>
+                         {React.createElement(config.icon, { size: 14 })}
+                         {config.label}
+                      </div>
+                    </td>
+                    <td><div style={{ fontSize: "0.85rem", color: "var(--text-dim)", fontWeight: "600" }}><Calendar size={14} style={{ verticalAlign: "middle", marginLeft: "5px" }} /> {new Date(ticket.createdAt).toLocaleDateString('ar-EG')}</div></td>
+                    <td>
+                      <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+                        {Object.keys(statusConfig).map(s => (
+                          <button 
+                            key={s}
+                            onClick={() => handleStatusChange(ticket.id, s)}
+                            className="btn-liquid"
+                            style={{ 
+                              padding: "10px", 
+                              borderRadius: "12px", 
+                              background: ticket.status === s ? statusConfig[s as keyof typeof statusConfig].color : "rgba(255,255,255,0.05)",
+                              border: "none",
+                              color: ticket.status === s ? "black" : "white",
+                              opacity: ticket.status === s ? 1 : 0.3
+                            }}
+                          >
+                             {React.createElement(statusConfig[s as keyof typeof statusConfig].icon, { size: 16 })}
+                          </button>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-          <div className="card animate-sweet" style={{ width: "600px" }}>
-             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "30px" }}>
-                <h3 style={{ fontSize: "1.5rem" }}>تذكرة صيانة جديدة</h3>
-                <button onClick={() => setIsModalOpen(false)} style={{ background: "none", border: "none", color: "white", cursor: "pointer" }}><X size={24}/></button>
+        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+          <div className="card animate-liquid" style={{ width: "600px" }}>
+             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px" }}>
+                <div>
+                   <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>فتح تذكرة صيانة</h3>
+                   <p style={{ color: "var(--text-dim)", fontSize: "0.9rem" }}>قم بتسجيل بيانات الجهاز والعطل بدقة</p>
+                </div>
+                <button onClick={() => setIsModalOpen(false)} style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white", padding: "10px", borderRadius: "12px", cursor: "pointer" }}><X size={28}/></button>
              </div>
-             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
-                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>اسم العميل</label>
-                      <input type="text" required style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value})} />
+             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>اسم العميل</label>
+                      <input type="text" required style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value})} />
                    </div>
-                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>رقم الهاتف</label>
-                      <input type="text" required style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} value={formData.customerPhone} onChange={e => setFormData({...formData, customerPhone: e.target.value})} />
+                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>رقم الهاتف</label>
+                      <input type="text" required style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.customerPhone} onChange={e => setFormData({...formData, customerPhone: e.target.value})} />
                    </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>نوع الجهاز</label>
-                  <input type="text" required style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} value={formData.deviceModel} onChange={e => setFormData({...formData, deviceModel: e.target.value})} />
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>موديل الجهاز</label>
+                  <input type="text" required style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.deviceModel} onChange={e => setFormData({...formData, deviceModel: e.target.value})} />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <label style={{ fontSize: "0.9rem", color: "var(--text-dim)" }}>وصف العطل</label>
-                  <textarea required style={{ width: "100%", height: "100px", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white", resize: "none" }} value={formData.issueDescription} onChange={e => setFormData({...formData, issueDescription: e.target.value})} />
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>وصف المشكلة</label>
+                  <textarea required style={{ width: "100%", height: "120px", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none", resize: "none" }} value={formData.issueDescription} onChange={e => setFormData({...formData, issueDescription: e.target.value})} />
                 </div>
-                <button type="submit" className="btn-sweet btn-sweet-primary" style={{ width: "100%", marginTop: "10px" }}>تسجيل الطلب</button>
+                <button type="submit" className="btn-liquid btn-liquid-primary" style={{ width: "100%", marginTop: "15px", padding: "18px", justifyContent: "center" }}>تسجيل الطلب</button>
              </form>
           </div>
         </div>
