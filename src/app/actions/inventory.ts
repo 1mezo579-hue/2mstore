@@ -17,6 +17,18 @@ export async function addInventoryItem(data: any) {
   return { success: true };
 }
 
+export async function updateInventoryItem(id: string, data: any) {
+  const { error } = await supabase.from('InventoryItem').update({
+    name: data.name,
+    category: data.category,
+    price: data.price,
+    quantity: data.quantity,
+  }).eq('id', id);
+  if (error) return { success: false, error: "حدث خطأ أثناء تعديل الصنف." };
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
 export async function deleteInventoryItem(id: string) {
   const { error } = await supabase.from('InventoryItem').delete().eq('id', id);
   if (error) return { success: false, error: "حدث خطأ أثناء الحذف." };
