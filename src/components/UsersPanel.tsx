@@ -248,6 +248,7 @@ export default function UsersPanel() {
              </form>
           </div>
         </div>
+      )}
     </div>
   );
 }
