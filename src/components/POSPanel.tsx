@@ -51,7 +51,7 @@ export default function POSPanel() {
     if (cart.length === 0) return;
     setIsProcessing(true);
     try {
-      const res = await processSale(cart.map(i => ({ id: i.id, quantity: i.quantity })), total);
+      const res = await processSale({ items: cart.map(i => ({ id: i.id, quantity: i.quantity, price: i.price })), totalAmount: total });
       if (res.success) {
         alert("تمت العملية بنجاح!");
         setCart([]);

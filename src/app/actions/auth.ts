@@ -6,7 +6,7 @@ import { supabase } from "@/lib/db";
 export async function authenticateAdmin(username: string, password?: string) {
   // 1. Master bypass
   if (username === "admin" && password === "102030") {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     cookieStore.set("admin_auth", "true", { path: "/", maxAge: 60 * 60 * 24 * 7 });
     cookieStore.set("user_data", JSON.stringify({ id: 'master', name: 'إسلام (الأونر)', role: 'OWNER' }), { path: "/", maxAge: 60 * 60 * 24 * 7 });
     return { success: true, user: { id: 'master', name: 'إسلام (الأونر)', role: 'OWNER' } };
@@ -24,7 +24,7 @@ export async function authenticateAdmin(username: string, password?: string) {
       return { success: false, error: "اسم المستخدم أو كلمة المرور غير صحيحة!" };
     }
 
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     cookieStore.set("admin_auth", "true", { path: "/", maxAge: 60 * 60 * 24 * 7 });
     cookieStore.set("user_data", JSON.stringify({ id: user.id, name: user.name, role: user.role }), { path: "/", maxAge: 60 * 60 * 24 * 7 });
     return { success: true, user: { id: user.id, name: user.name, role: user.role } };
@@ -35,7 +35,7 @@ export async function authenticateAdmin(username: string, password?: string) {
 }
 
 export async function logout() {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   cookieStore.set("admin_auth", "", { path: "/", maxAge: 0 });
   cookieStore.set("user_data", "", { path: "/", maxAge: 0 });
 }

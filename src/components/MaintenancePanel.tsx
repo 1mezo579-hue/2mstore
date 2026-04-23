@@ -140,10 +140,16 @@ export default function MaintenancePanel() {
                       </div>
                     </td>
                     <td>
-                      <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "8px", fontSize: "0.9rem", fontWeight: "900", background: `${config.color}15`, padding: "6px 15px", borderRadius: "100px", width: "fit-content" }}>
-                         <config.icon size={14} />
-                         {config.label}
-                      </div>
+                      {(() => {
+                        const config = (statusConfig as any)[ticket.status] || statusConfig.PENDING;
+                        const Icon = config.icon;
+                        return (
+                          <div style={{ color: config.color, display: "flex", alignItems: "center", gap: "8px", fontSize: "0.9rem", fontWeight: "900", background: `${config.color}15`, padding: "6px 15px", borderRadius: "100px", width: "fit-content" }}>
+                             <Icon size={14} />
+                             {config.label}
+                          </div>
+                        );
+                      })()}
                     </td>
                     <td><div style={{ fontSize: "0.85rem", color: "var(--text-dim)", fontWeight: "600" }}><Calendar size={14} style={{ verticalAlign: "middle", marginLeft: "5px" }} /> {new Date(ticket.createdAt).toLocaleDateString('ar-EG')}</div></td>
                     <td>

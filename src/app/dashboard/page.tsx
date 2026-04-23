@@ -39,8 +39,11 @@ export default function Dashboard() {
     const userDataCookie = cookies.find(c => c.trim().startsWith('user_data='));
     if (userDataCookie) {
       try {
-        const decoded = decodeURIComponent(userDataCookie.split('=')[1]);
-        setUser(JSON.parse(decoded));
+        const parts = userDataCookie.split('=');
+        if (parts.length > 1) {
+          const decoded = decodeURIComponent(parts[1]);
+          setUser(JSON.parse(decoded));
+        }
       } catch (e) {
         console.error("Error parsing user data cookie", e);
       }
