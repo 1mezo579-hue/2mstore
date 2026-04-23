@@ -5,7 +5,13 @@ import { revalidatePath } from "next/cache";
 
 export async function getInventoryItems() {
   const { data, error } = await supabase.from('InventoryItem').select('*').order('createdAt', { ascending: false });
-  if (error) { console.error(error); return []; }
+  if (error) { 
+    console.error("FETCH ERROR InventoryItem:", error.message, error.details, error.hint); 
+    return []; 
+  }
+  if (data && data.length > 0) {
+    console.log("COLUMNS IN InventoryItem:", Object.keys(data[0]));
+  }
   return data || [];
 }
 
@@ -33,7 +39,10 @@ export async function addInventoryItem(data: any) {
     
     if (error) {
       console.error("Supabase Inventory Insert Error:", error);
-      return { success: false, error: `فشل الحفظ: ${error.message} (BranchID: ${branchId})` };
+      // Diagnostic: Try to get columns
+      const { data: sample } = await supabase.from('InventoryItem').select('*').limit(1);
+      const cols = sample && sample.length > 0 ? Object.keys(sample[0]).join(", ") : "unknown";
+      return { success: false, error: `فشل الحفظ: ${error.message}. الأعمدة المتاحة: ${cols}` };
     }
     
     revalidatePath("/dashboard");
