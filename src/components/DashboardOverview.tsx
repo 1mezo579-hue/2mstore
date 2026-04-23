@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import { ShoppingCart, Wrench, Package, TrendingUp, Users, DollarSign, Activity } from "lucide-react";
+import { ShoppingCart, Wrench, Package, TrendingUp, Users, DollarSign, Activity, Bell } from "lucide-react";
 
 export default function DashboardOverview() {
   const stats = [
-    { label: "المبيعات اليومية", value: "1,250 ج.م", icon: <DollarSign />, color: "var(--ps-primary)", trend: "+12%", bg: "rgba(0, 114, 255, 0.1)" },
-    { label: "طلبات الصيانة", value: "8", icon: <Wrench />, color: "var(--neon-triangle)", trend: "5 قيد العمل", bg: "rgba(0, 255, 204, 0.1)" },
-    { label: "المنتجات بالمخزن", value: "142", icon: <Package />, color: "var(--neon-square)", trend: "12 نفذت", bg: "rgba(209, 97, 255, 0.1)" },
-    { label: "العملاء الجدد", value: "24", icon: <Users />, color: "var(--neon-circle)", trend: "+4 اليوم", bg: "rgba(255, 77, 109, 0.1)" },
+    { label: "المبيعات اليومية", value: "1,250 ج.م", icon: <DollarSign size={28} />, color: "var(--ps-primary)", trend: "+12%", bg: "rgba(0, 114, 255, 0.1)" },
+    { label: "طلبات الصيانة", value: "8", icon: <Wrench size={28} />, color: "var(--neon-triangle)", trend: "5 قيد العمل", bg: "rgba(0, 255, 204, 0.1)" },
+    { label: "المنتجات بالمخزن", value: "142", icon: <Package size={28} />, color: "var(--neon-square)", trend: "12 نفذت", bg: "rgba(209, 97, 255, 0.1)" },
+    { label: "العملاء الجدد", value: "24", icon: <Users size={28} />, color: "var(--neon-circle)", trend: "+4 اليوم", bg: "rgba(255, 77, 109, 0.1)" },
   ];
 
   return (
@@ -26,7 +26,7 @@ export default function DashboardOverview() {
           <div key={i} className="card" style={{ borderBottom: `4px solid ${stat.color}` }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <div style={{ background: stat.bg, color: stat.color, padding: "14px", borderRadius: "18px", boxShadow: `0 0 15px ${stat.color}30` }}>
-                {React.cloneElement(stat.icon as React.ReactElement, { size: 28 })}
+                {stat.icon}
               </div>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                  <span style={{ fontSize: "0.85rem", color: stat.color, fontWeight: "900" }}>{stat.trend}</span>
@@ -39,7 +39,7 @@ export default function DashboardOverview() {
         ))}
       </div>
 
-      <div style={{ marginTop: "50px", display: "grid", gridTemplateColumns: "2fr 1.2fr", gap: "30px" }}>
+      <div className="overview-content-grid" style={{ marginTop: "50px", display: "grid", gridTemplateColumns: "2fr 1.2fr", gap: "30px" }}>
         <div className="card" style={{ padding: "0" }}>
           <div style={{ padding: "30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
@@ -48,7 +48,7 @@ export default function DashboardOverview() {
             </div>
             <button className="btn-liquid" style={{ fontSize: "0.8rem", padding: "8px 20px" }}>سجل العمليات</button>
           </div>
-          <div style={{ padding: "0 20px" }}>
+          <div style={{ padding: "0 20px", overflowX: "auto" }}>
             <table className="liquid-table">
               <thead>
                 <tr>
@@ -120,6 +120,14 @@ export default function DashboardOverview() {
           <button className="btn-liquid" style={{ width: "100%", marginTop: "30px", justifyContent: "center" }}>تجاهل الكل</button>
         </div>
       </div>
+      
+      <style jsx>{`
+        @media (max-width: 1200px) {
+          .overview-content-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
