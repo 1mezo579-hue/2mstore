@@ -51,10 +51,17 @@ export async function updateInventoryItem(id: string, data: any) {
   const { error } = await supabase.from('InventoryItem').update({
     name: data.name,
     category: data.category,
-    price: data.price,
+    sellPrice: data.sellPrice,
+    buyPrice: data.buyPrice,
     quantity: data.quantity,
+    condition: data.condition,
+    serialNumber: data.serialNumber,
+    barcode: data.barcode,
   }).eq('id', id);
-  if (error) return { success: false, error: "حدث خطأ أثناء تعديل الصنف." };
+  if (error) {
+    console.error("Update Error:", error);
+    return { success: false, error: "حدث خطأ أثناء تعديل الصنف: " + error.message };
+  }
   revalidatePath("/dashboard");
   return { success: true };
 }

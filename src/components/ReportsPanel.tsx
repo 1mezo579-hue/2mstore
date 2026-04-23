@@ -151,7 +151,7 @@ export default function ReportsPanel() {
                     <td style={{ fontWeight: "700" }}>{item.name}</td>
                     <td><span className="ps-tag">{item.category}</span></td>
                     <td><span style={{ color: "var(--neon-circle)", fontWeight: "900" }}>{item.quantity} قطعة</span></td>
-                    <td style={{ color: "var(--ps-primary)", fontWeight: "800" }}>{(Number(item.price) || 0).toLocaleString()} ج.م</td>
+                    <td style={{ color: "var(--ps-primary)", fontWeight: "800" }}>{(Number(item.sellPrice) || 0).toLocaleString()} ج.م</td>
                   </tr>
                 ))}
               </tbody>
