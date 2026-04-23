@@ -1,9 +1,15 @@
 "use client";
 
-import React from "react";
-import { ShoppingCart, Wrench, Package, TrendingUp, Users, DollarSign, Activity, Bell } from "lucide-react";
+import React, { useState } from "react";
+import { ShoppingCart, Wrench, Package, TrendingUp, Users, DollarSign, Activity, Bell, X, FileText } from "lucide-react";
 
 export default function DashboardOverview() {
+  const [isLogOpen, setIsLogOpen] = useState(false);
+  const [alerts, setAlerts] = useState([
+    { msg: "نقص في مخزون أجهزة التحكم", time: "منذ ساعتين", color: "var(--neon-circle)", icon: <Package size={18}/> },
+    { msg: "تم تحديث أسعار الألعاب", time: "منذ 4 ساعات", color: "var(--ps-primary)", icon: <TrendingUp size={18}/> },
+    { msg: "عميل جديد مسجل", time: "منذ 6 ساعات", color: "var(--neon-triangle)", icon: <Users size={18}/> }
+  ]);
   const stats = [
     { label: "المبيعات اليومية", value: "1,250 ج.م", Icon: DollarSign, color: "var(--ps-primary)", trend: "+12%", bg: "rgba(0, 114, 255, 0.1)" },
     { label: "طلبات الصيانة", value: "8", Icon: Wrench, color: "var(--neon-triangle)", trend: "5 قيد العمل", bg: "rgba(0, 255, 204, 0.1)" },
@@ -46,7 +52,7 @@ export default function DashboardOverview() {
                <h3 style={{ fontSize: "1.4rem", fontWeight: "800" }}>آخر العمليات</h3>
                <p style={{ fontSize: "0.85rem", color: "var(--text-dim)" }}>تحديث فوري لكل ما يحدث في المتجر</p>
             </div>
-            <button className="btn-liquid" style={{ fontSize: "0.8rem", padding: "8px 20px" }}>سجل العمليات</button>
+             <button className="btn-liquid" onClick={() => setIsLogOpen(true)} style={{ fontSize: "0.8rem", padding: "8px 20px" }}>سجل العمليات</button>
           </div>
           <div style={{ padding: "0 20px", overflowX: "auto" }}>
             <table className="liquid-table">
@@ -103,11 +109,7 @@ export default function DashboardOverview() {
              <h3 style={{ fontSize: "1.4rem", fontWeight: "800" }}>تنبيهات النظام</h3>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            {[
-              { msg: "نقص في مخزون أجهزة التحكم", time: "منذ ساعتين", color: "var(--neon-circle)", icon: <Package size={18}/> },
-              { msg: "تم تحديث أسعار الألعاب", time: "منذ 4 ساعات", color: "var(--ps-primary)", icon: <TrendingUp size={18}/> },
-              { msg: "عميل جديد مسجل", time: "منذ 6 ساعات", color: "var(--neon-triangle)", icon: <Users size={18}/> }
-            ].map((n, i) => (
+            {alerts.length > 0 ? alerts.map((n, i) => (
               <div key={i} style={{ display: "flex", gap: "18px", alignItems: "center", padding: "15px", borderRadius: "20px", background: "rgba(255,255,255,0.03)", borderRight: `4px solid ${n.color}` }}>
                 <div style={{ color: n.color }}>{n.icon}</div>
                 <div style={{ flex: 1 }}>
@@ -115,11 +117,51 @@ export default function DashboardOverview() {
                   <div style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>{n.time}</div>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div style={{ textAlign: "center", padding: "40px", color: "var(--text-dim)", opacity: 0.5 }}>
+                <Bell size={40} style={{ marginBottom: "15px" }} />
+                <p>لا توجد تنبيهات جديدة</p>
+              </div>
+            )}
           </div>
-          <button className="btn-liquid" style={{ width: "100%", marginTop: "30px", justifyContent: "center" }}>تجاهل الكل</button>
+          <button className="btn-liquid" onClick={() => setAlerts([])} style={{ width: "100%", marginTop: "30px", justifyContent: "center" }}>تجاهل الكل</button>
         </div>
       </div>
+      {isLogOpen && (
+        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+          <div className="card animate-sweet" style={{ width: "95%", maxWidth: "700px", padding: "0" }}>
+             <div style={{ padding: "30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h3 style={{ fontSize: "1.5rem", fontWeight: "900" }}>سجل العمليات الكامل</h3>
+                <button onClick={() => setIsLogOpen(false)} style={{ background: "none", border: "none", color: "white", cursor: "pointer" }}><X size={24}/></button>
+             </div>
+             <div style={{ padding: "30px", maxHeight: "500px", overflowY: "auto" }}>
+                <table className="liquid-table">
+                  <thead>
+                    <tr>
+                      <th>العملية</th>
+                      <th>المسؤول</th>
+                      <th>التوقيت</th>
+                      <th>القيمة</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[1,2,3,4,5,6,7].map(i => (
+                      <tr key={i}>
+                        <td>بيع منتج رقم #{i}042</td>
+                        <td>إسلام</td>
+                        <td>منذ {i} ساعات</td>
+                        <td style={{ color: "var(--ps-primary)", fontWeight: "800" }}>{i * 150} ج.م</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+             </div>
+             <div style={{ padding: "30px", textAlign: "center", borderTop: "var(--glass-border)" }}>
+                <button className="btn-liquid btn-liquid-primary" onClick={() => setIsLogOpen(false)} style={{ width: "100%", justifyContent: "center" }}>إغلاق السجل</button>
+             </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

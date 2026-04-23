@@ -207,8 +207,23 @@ export default function MaintenancePanel() {
                    </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>موديل الجهاز</label>
-                  <input type="text" required style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.deviceModel} onChange={e => setFormData({...formData, deviceModel: e.target.value})} />
+                  <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>نوع الجهاز / الموديل</label>
+                  <select 
+                    required 
+                    style={{ width: "100%", padding: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} 
+                    value={formData.deviceModel} 
+                    onChange={e => setFormData({...formData, deviceModel: e.target.value})}
+                  >
+                    <option value="" disabled style={{ background: "var(--ps-surface-dark)" }}>اختر الجهاز...</option>
+                    <option value="PlayStation 5" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 5</option>
+                    <option value="PlayStation 4 Pro" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 4 Pro</option>
+                    <option value="PlayStation 4 Slim" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 4 Slim</option>
+                    <option value="PlayStation 3" style={{ background: "var(--ps-surface-dark)" }}>PlayStation 3</option>
+                    <option value="DualSense Controller" style={{ background: "var(--ps-surface-dark)" }}>DualSense Controller (PS5)</option>
+                    <option value="DualShock 4" style={{ background: "var(--ps-surface-dark)" }}>DualShock 4 (PS4)</option>
+                    <option value="Xbox Series X/S" style={{ background: "var(--ps-surface-dark)" }}>Xbox Series X/S</option>
+                    <option value="أخرى" style={{ background: "var(--ps-surface-dark)" }}>أخرى...</option>
+                  </select>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   <label style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-soft)" }}>وصف المشكلة</label>

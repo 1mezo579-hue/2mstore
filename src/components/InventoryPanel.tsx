@@ -155,16 +155,31 @@ export default function InventoryPanel() {
                   <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>اسم المنتج</label>
                   <input type="text" required style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                      <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>سعر البيع</label>
-                      <input type="number" required style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} />
-                   </div>
-                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                      <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الكمية المتاحة</label>
-                      <input type="number" required style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} />
-                   </div>
-                </div>
+                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                       <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الفئة</label>
+                       <select 
+                          required 
+                          style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} 
+                          value={formData.category} 
+                          onChange={e => setFormData({...formData, category: e.target.value})}
+                       >
+                          <option value="أجهزة" style={{ background: "var(--ps-surface-dark)" }}>أجهزة (Consoles)</option>
+                          <option value="دراعات" style={{ background: "var(--ps-surface-dark)" }}>دراعات (Controllers)</option>
+                          <option value="ألعاب" style={{ background: "var(--ps-surface-dark)" }}>ألعاب (Games)</option>
+                          <option value="إكسسوارات" style={{ background: "var(--ps-surface-dark)" }}>إكسسوارات (Accessories)</option>
+                          <option value="أخرى" style={{ background: "var(--ps-surface-dark)" }}>أخرى (Other)</option>
+                       </select>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                       <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>سعر البيع</label>
+                       <input type="number" required style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} />
+                    </div>
+                 </div>
+                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الكمية المتاحة</label>
+                    <input type="number" required style={{ width: "100%", padding: "15px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} />
+                 </div>
                 <button type="submit" className="btn-liquid btn-liquid-primary" style={{ width: "100%", marginTop: "15px", padding: "18px", justifyContent: "center", fontSize: "1.1rem" }}>حفظ في المستودع</button>
              </form>
           </div>

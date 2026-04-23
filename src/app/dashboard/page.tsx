@@ -32,6 +32,8 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("inventory");
   const [user, setUser] = useState<{name: string, role: string} | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -150,11 +152,18 @@ export default function Dashboard() {
           </div>
           
           <div className="header-actions" style={{ display: "flex", alignItems: "center", gap: "25px" }}>
-            <button style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white", padding: "12px", borderRadius: "15px", cursor: "pointer", position: "relative" }}>
+            <button 
+              onClick={() => setIsNotifModalOpen(true)}
+              style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white", padding: "12px", borderRadius: "15px", cursor: "pointer", position: "relative" }}
+            >
               <Bell size={22} />
               <span style={{ position: "absolute", top: "-5px", left: "-5px", background: "var(--neon-circle)", width: "20px", height: "20px", borderRadius: "50%", fontSize: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", boxShadow: "0 0 10px rgba(255, 77, 109, 0.5)" }}>3</span>
             </button>
-            <div className="user-profile" style={{ display: "flex", alignItems: "center", gap: "15px", background: "rgba(255,255,255,0.05)", padding: "8px 20px", borderRadius: "100px", border: "1px solid rgba(255,255,255,0.1)" }}>
+            <div 
+              className="user-profile" 
+              onClick={() => setIsProfileModalOpen(true)}
+              style={{ display: "flex", alignItems: "center", gap: "15px", background: "rgba(255,255,255,0.05)", padding: "8px 20px", borderRadius: "100px", border: "1px solid rgba(255,255,255,0.1)", cursor: "pointer" }}
+            >
               <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, #0072FF, #00C6FF)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "900", fontSize: "1.1rem", boxShadow: "0 0 15px rgba(0, 114, 255, 0.4)" }}>
                 {user ? user.name.charAt(0).toUpperCase() : "E"}
               </div>
@@ -185,6 +194,70 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* User Profile Modal */}
+      {isProfileModalOpen && (
+        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000 }}>
+          <div className="card animate-sweet" style={{ width: "95%", maxWidth: "450px", textAlign: "center", padding: "50px 40px" }}>
+             <button onClick={() => setIsProfileModalOpen(false)} style={{ position: "absolute", top: "20px", right: "20px", background: "none", border: "none", color: "white", cursor: "pointer" }}><X size={24}/></button>
+             <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #0072FF, #00C6FF)", margin: "0 auto 25px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "2.5rem", fontWeight: "900", boxShadow: "0 0 30px rgba(0, 114, 255, 0.5)" }}>
+                {user ? user.name.charAt(0).toUpperCase() : "E"}
+             </div>
+             <h2 style={{ fontSize: "2rem", fontWeight: "900", marginBottom: "5px" }}>{user ? user.name : "إسلام"}</h2>
+             <span className="ps-tag tag-blue" style={{ fontSize: "0.9rem", padding: "5px 20px" }}>{user ? user.role : "مدير النظام"}</span>
+             
+             <div style={{ marginTop: "40px", display: "flex", flexDirection: "column", gap: "15px", textAlign: "right" }}>
+                <div style={{ background: "rgba(255,255,255,0.02)", padding: "15px 20px", borderRadius: "15px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                   <div style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>اسم المستخدم</div>
+                   <div style={{ fontWeight: "700" }}>@{user ? user.name.toLowerCase().replace(/ /g, '_') : "admin"}</div>
+                </div>
+                <div style={{ background: "rgba(255,255,255,0.02)", padding: "15px 20px", borderRadius: "15px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                   <div style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>الفرع الحالي</div>
+                   <div style={{ fontWeight: "700" }}>المركز الرئيسي - 2M Store</div>
+                </div>
+             </div>
+
+             <button 
+               className="btn-liquid" 
+               onClick={handleLogout}
+               style={{ width: "100%", marginTop: "35px", justifyContent: "center", background: "rgba(255, 77, 109, 0.1)", color: "var(--neon-circle)", border: "1px solid rgba(255, 77, 109, 0.2)" }}
+             >
+                <LogOut size={20} /> تسجيل الخروج من النظام
+             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Notifications Modal */}
+      {isNotifModalOpen && (
+        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000 }}>
+          <div className="card animate-sweet" style={{ width: "95%", maxWidth: "500px", padding: "0" }}>
+             <div style={{ padding: "30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h3 style={{ fontSize: "1.5rem", fontWeight: "900" }}>تنبيهات النظام</h3>
+                <button onClick={() => setIsNotifModalOpen(false)} style={{ background: "none", border: "none", color: "white", cursor: "pointer" }}><X size={24}/></button>
+             </div>
+             <div style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "10px", maxHeight: "400px", overflowY: "auto" }}>
+                {[
+                  { msg: "نقص في مخزون أجهزة التحكم", time: "منذ ساعتين", color: "var(--neon-circle)", icon: <Package size={18}/> },
+                  { msg: "تم تحديث أسعار الألعاب", time: "منذ 4 ساعات", color: "var(--ps-primary)", icon: <Bell size={18}/> },
+                  { msg: "عميل جديد مسجل", time: "منذ 6 ساعات", color: "var(--neon-triangle)", icon: <Users size={18}/> },
+                  { msg: "اكتملت عملية صيانة جهاز PS5", time: "منذ يوم واحد", color: "var(--ps-primary)", icon: <Wrench size={18}/> }
+                ].map((n, i) => (
+                  <div key={i} style={{ display: "flex", gap: "18px", alignItems: "center", padding: "15px", borderRadius: "20px", background: "rgba(255,255,255,0.03)", borderRight: `4px solid ${n.color}` }}>
+                    <div style={{ color: n.color }}>{n.icon}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: "0.95rem", fontWeight: "700" }}>{n.msg}</div>
+                      <div style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>{n.time}</div>
+                    </div>
+                  </div>
+                ))}
+             </div>
+             <div style={{ padding: "20px", textAlign: "center" }}>
+                <button className="btn-liquid" style={{ width: "100%", justifyContent: "center" }} onClick={() => setIsNotifModalOpen(false)}>تجاهل الكل</button>
+             </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
