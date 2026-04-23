@@ -29,7 +29,7 @@ export async function createMaintenanceTicket(data: any) {
   return { success: true };
 }
 
-export async function updateTicketStatus(ticketId: number, status: string) {
+export async function updateTicketStatus(ticketId: any, status: string) {
   const { error } = await supabase.from('MaintenanceTicket').update({ status }).eq('id', ticketId);
   if (error) return { success: false, error: "حدث خطأ أثناء تحديث الحالة." };
   revalidatePath("/dashboard");
