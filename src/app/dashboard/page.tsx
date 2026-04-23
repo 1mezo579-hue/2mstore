@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Gamepad2, 
   LayoutDashboard, 
@@ -19,7 +19,6 @@ import {
 
 import { logout } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 import DashboardOverview from "@/components/DashboardOverview";
 import InventoryPanel from "@/components/InventoryPanel";
@@ -36,7 +35,6 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    // Basic cookie parsing for user data
     const cookies = document.cookie.split(';');
     const userDataCookie = cookies.find(c => c.trim().startsWith('user_data='));
     if (userDataCookie) {
@@ -55,14 +53,12 @@ export default function Dashboard() {
     setLoggingOut(true);
     try {
       await logout();
-      // Force hard reload to login page
       window.location.href = "/";
     } catch (e) {
       window.location.href = "/";
     }
   };
 
-  // Filter menu items based on user role
   const menuItems = [
     { id: "dashboard", label: "لوحة التحكم", icon: <LayoutDashboard size={20} />, roles: ["OWNER", "MANAGER", "SELLER"] },
     { id: "inventory", label: "المخزون", icon: <Package size={20} />, roles: ["OWNER", "MANAGER"] },
@@ -77,42 +73,20 @@ export default function Dashboard() {
     !user || item.roles.includes(user.role)
   );
 
-  useEffect(() => {
-    // Set default tab based on role if current tab is unauthorized
-    if (user) {
-      const currentTabAuth = menuItems.find(i => i.id === activeTab)?.roles.includes(user.role);
-      if (!currentTabAuth && activeTab !== "settings") {
-        if (user.role === "MAINTENANCE") setActiveTab("maintenance");
-        else if (user.role === "SELLER") setActiveTab("pos");
-        else setActiveTab("dashboard");
-      }
-    }
-  }, [user]);
-
   return (
     <div className="app-container">
-      {/* Mobile Overlay */}
-      <div 
-        className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`} 
-        onClick={() => setIsSidebarOpen(false)}
-      ></div>
-
       {/* Sidebar */}
-      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''} ps-pattern-bg`}>
-        <div className="ps-symbols-float" style={{ opacity: 0.3 }}>
-          <span className="ps-symbol ps-triangle symbol-t" style={{ width: "24px", height: "24px", top: "5%", left: "10%" }}></span>
-          <span className="ps-symbol ps-circle symbol-c" style={{ width: "20px", height: "20px", top: "40%", right: "15%" }}></span>
-          <span className="ps-symbol ps-x symbol-x" style={{ width: "22px", height: "22px", bottom: "20%", left: "20%" }}></span>
-          <span className="ps-symbol ps-square symbol-s" style={{ width: "18px", height: "18px", top: "70%", right: "10%" }}></span>
-        </div>
-        <div className="sidebar-header">
-          <div className="logo-icon">
-            <Gamepad2 size={32} color="#FFFFFF" />
+      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header" style={{ padding: "0 30px", marginBottom: "40px" }}>
+          <div className="flex items-center gap-3">
+             <div style={{ background: "var(--ps-primary)", padding: "8px", borderRadius: "12px", boxShadow: "0 0 15px var(--ps-primary-glow)" }}>
+                <Gamepad2 size={24} color="#FFFFFF" />
+             </div>
+             <h2 className="logo-text" style={{ fontSize: "1.2rem", fontWeight: "900", letterSpacing: "1px" }}>2M Store</h2>
           </div>
-          <h2 className="logo-text">2M Store</h2>
         </div>
 
-        <nav className="sidebar-nav">
+        <nav className="sidebar-nav" style={{ flex: 1 }}>
           {visibleMenuItems.map((item) => (
             <button
               key={item.id}
@@ -128,7 +102,7 @@ export default function Dashboard() {
           ))}
         </nav>
 
-        <div className="sidebar-footer">
+        <div className="sidebar-footer" style={{ paddingBottom: "20px" }}>
           {(user?.role === "OWNER" || user?.role === "MANAGER") && (
             <button 
               className={`nav-item ${activeTab === "settings" ? "active" : ""}`}
@@ -138,7 +112,7 @@ export default function Dashboard() {
               <span className="nav-label">الإعدادات</span>
             </button>
           )}
-          <button className="nav-item logout" onClick={handleLogout} disabled={loggingOut} style={{ marginTop: "10px", color: "#ff4444" }}>
+          <button className="nav-item logout" onClick={handleLogout} disabled={loggingOut} style={{ color: "#ff4444" }}>
             <span className="nav-icon"><LogOut size={20} /></span>
             <span className="nav-label">{loggingOut ? "جاري الخروج..." : "تسجيل الخروج"}</span>
           </button>
@@ -147,48 +121,72 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="main-content">
-        {/* Top Header */}
         <header className="top-header">
-          <button className="mobile-menu-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-            <Menu size={28} />
-          </button>
-          
-          <div className="header-search">
-            <Search size={20} className="search-icon" />
-            <input type="text" placeholder="ابحث عن منتج، عميل، أو تذكرة صيانة..." className="search-input" />
+          <div className="flex items-center gap-6">
+            <button className="mobile-menu-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)} style={{ background: "none", border: "none", color: "white", cursor: "pointer" }}>
+              <Menu size={24} />
+            </button>
+            <div className="header-search" style={{ position: "relative", width: "400px" }}>
+              <Search size={18} style={{ position: "absolute", right: "15px", top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
+              <input 
+                type="text" 
+                placeholder="ابحث هنا..." 
+                style={{ width: "100%", padding: "10px 45px 10px 15px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white", fontSize: "0.9rem" }}
+              />
+            </div>
           </div>
           
-          <div className="header-actions">
-            <button className="icon-btn">
+          <div className="header-actions" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <button style={{ background: "var(--ps-surface-light)", border: "none", color: "white", padding: "10px", borderRadius: "10px", cursor: "pointer", position: "relative" }}>
               <Bell size={20} />
-              <span className="badge">3</span>
+              <span style={{ position: "absolute", top: "-5px", left: "-5px", background: "var(--ps-primary)", width: "18px", height: "18px", borderRadius: "50%", fontSize: "0.7rem", display: "flex", alignItems: "center", justifyCenter: "center" }}>3</span>
             </button>
-            <div className="user-profile">
-              <div className="avatar">{user ? user.name.charAt(0).toUpperCase() : "E"}</div>
-              <div className="user-info">
-                <span className="user-name">{user ? user.name : "إسلام"}</span>
-                <span className="user-role">{user ? user.role : "مدير النظام"}</span>
+            <div className="user-profile" style={{ display: "flex", alignItems: "center", gap: "12px", background: "var(--ps-surface-light)", padding: "6px 15px", borderRadius: "50px" }}>
+              <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--ps-primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
+                {user ? user.name.charAt(0).toUpperCase() : "E"}
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: "0.85rem", fontWeight: "600" }}>{user ? user.name : "إسلام"}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-dim)" }}>{user ? user.role : "مدير النظام"}</div>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Dashboard Content */}
         <div className="content-area">
-          {activeTab === "dashboard" && <DashboardOverview />}
-          {activeTab === "inventory" && <InventoryPanel />}
-          {activeTab === "pos" && <POSPanel />}
-          {activeTab === "maintenance" && <MaintenancePanel />}
-          {activeTab === "reports" && (
-            <div style={{color: "var(--text-secondary)", textAlign: "center", padding: "100px"}}>
-              <h2>جاري العمل على قسم التقارير...</h2>
-            </div>
-          )}
-          {activeTab === "branches" && <BranchesPanel />}
-          {activeTab === "users" && <UsersPanel />}
-          {activeTab === "settings" && <SettingsPanel />}
+          <div className="animate-sweet">
+            {activeTab === "dashboard" && <DashboardOverview />}
+            {activeTab === "inventory" && <InventoryPanel />}
+            {activeTab === "pos" && <POSPanel />}
+            {activeTab === "maintenance" && <MaintenancePanel />}
+            {activeTab === "reports" && (
+              <div className="card" style={{ textAlign: "center", padding: "100px" }}>
+                <FileText size={64} style={{ color: "var(--ps-primary)", opacity: 0.5, marginBottom: "20px" }} />
+                <h2 style={{ fontSize: "1.5rem" }}>جاري العمل على قسم التقارير...</h2>
+              </div>
+            )}
+            {activeTab === "branches" && <BranchesPanel />}
+            {activeTab === "users" && <UsersPanel />}
+            {activeTab === "settings" && <SettingsPanel />}
+          </div>
         </div>
       </main>
+
+      <style jsx>{`
+        .sidebar-nav {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin-top: 20px;
+        }
+        .logout:hover {
+          background: rgba(255, 68, 68, 0.1) !important;
+        }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-3 { gap: 12px; }
+        .gap-6 { gap: 24px; }
+      `}</style>
     </div>
   );
 }

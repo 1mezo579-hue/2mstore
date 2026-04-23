@@ -1,107 +1,83 @@
 "use client";
 
-import React from "react";
-import { Settings, User, Bell, Database, Shield, Monitor } from "lucide-react";
+import React, { useState } from "react";
+import { Settings, Save, Globe, Lock, Bell, Database, HardDrive, Smartphone, Monitor } from "lucide-react";
 
 export default function SettingsPanel() {
+  const [activeSetting, setActiveSetting] = useState("general");
+
+  const settingsTabs = [
+    { id: "general", label: "إعدادات عامة", icon: Globe },
+    { id: "security", label: "الأمان", icon: Lock },
+    { id: "notifications", label: "التنبيهات", icon: Bell },
+    { id: "database", label: "قاعدة البيانات", icon: Database },
+  ];
+
   return (
-    <div className="panel-container animate-fade-in">
-      <div className="panel-header">
-        <div className="header-title">
-          <Settings className="header-icon" />
-          <div>
-            <h2>الإعدادات</h2>
-            <p>تخصيص النظام وتفضيلات الحساب</p>
+    <div className="settings-panel">
+      <div className="page-header">
+        <span className="section-label">التكوين</span>
+        <h1 className="page-title">إعدادات النظام</h1>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "250px 1fr", gap: "30px", marginTop: "30px" }}>
+        {/* Settings Navigation */}
+        <div className="card" style={{ padding: "10px" }}>
+          {settingsTabs.map(tab => (
+            <div 
+              key={tab.id}
+              onClick={() => setActiveSetting(tab.id)}
+              style={{ 
+                padding: "15px 20px", 
+                borderRadius: "12px", 
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                background: activeSetting === tab.id ? "var(--ps-surface-light)" : "transparent",
+                color: activeSetting === tab.id ? "white" : "var(--text-dim)",
+                transition: "all 0.2s"
+              }}
+            >
+              <tab.icon size={18} color={activeSetting === tab.id ? "var(--ps-primary)" : "currentColor"} />
+              <span style={{ fontWeight: activeSetting === tab.id ? "600" : "normal" }}>{tab.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Settings Content */}
+        <div className="card animate-sweet">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
+             <h2 style={{ fontSize: "1.3rem" }}>{settingsTabs.find(t => t.id === activeSetting)?.label}</h2>
+             <button className="btn-sweet btn-sweet-primary"><Save size={18} /> حفظ التغييرات</button>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+               <label style={{ fontSize: "0.95rem", fontWeight: "600" }}>اسم المتجر</label>
+               <input type="text" defaultValue="2M Store" style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }} />
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+               <label style={{ fontSize: "0.95rem", fontWeight: "600" }}>العملة الافتراضية</label>
+               <select style={{ width: "100%", padding: "12px", background: "var(--ps-surface-light)", border: "none", borderRadius: "10px", color: "white" }}>
+                  <option>جنيه مصري (EGP)</option>
+                  <option>دولار أمريكي (USD)</option>
+               </select>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px", background: "rgba(255,255,255,0.02)", borderRadius: "15px" }}>
+               <div>
+                  <div style={{ fontWeight: "600" }}>وضع الصيانة</div>
+                  <div style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>إغلاق المتجر مؤقتاً لإجراء تحديثات</div>
+               </div>
+               <div style={{ width: "50px", height: "26px", background: "var(--ps-surface-light)", borderRadius: "50px", position: "relative", cursor: "pointer" }}>
+                  <div style={{ position: "absolute", left: "4px", top: "4px", width: "18px", height: "18px", background: "var(--text-dim)", borderRadius: "50%" }}></div>
+               </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="settings-grid">
-        <div className="settings-section card">
-          <h3><User size={20} /> إعدادات الملف الشخصي</h3>
-          <div className="settings-items">
-            <div className="setting-item">
-              <label>تغيير اسم العرض</label>
-              <input type="text" className="input-field" placeholder="إسلام" />
-            </div>
-            <button className="btn-primary">حفظ التغييرات</button>
-          </div>
-        </div>
-
-        <div className="settings-section card">
-          <h3><Monitor size={20} /> المظهر والنظام</h3>
-          <div className="settings-items">
-            <div className="setting-toggle">
-              <span>الوضع الداكن (Dark Mode)</span>
-              <div className="toggle-switch active"></div>
-            </div>
-            <div className="setting-item">
-              <label>لغة النظام</label>
-              <select className="input-field">
-                <option>العربية (Arabic)</option>
-                <option>English</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div className="settings-section card">
-          <h3><Database size={20} /> قاعدة البيانات والنسخ الاحتياطي</h3>
-          <div className="settings-items">
-            <button className="btn-secondary">تصدير قاعدة البيانات (Backup)</button>
-            <button className="btn-secondary" style={{color: "var(--accent-danger)"}}>مسح كافة البيانات</button>
-          </div>
-        </div>
-      </div>
-
-      <style jsx>{`
-        .settings-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          gap: 1.5rem;
-          margin-top: 1.5rem;
-        }
-        .settings-section h3 {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 20px;
-          color: var(--primary-light);
-        }
-        .settings-items {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-        }
-        .setting-toggle {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px;
-          background: rgba(255,255,255,0.03);
-          border-radius: 8px;
-        }
-        .toggle-switch {
-          width: 40px;
-          height: 20px;
-          background: #444;
-          border-radius: 10px;
-          position: relative;
-        }
-        .toggle-switch.active {
-          background: var(--primary);
-        }
-        .toggle-switch.active::after {
-          content: '';
-          position: absolute;
-          right: 2px;
-          top: 2px;
-          width: 16px;
-          height: 16px;
-          background: white;
-          border-radius: 50%;
-        }
-      `}</style>
     </div>
   );
 }
