@@ -98,10 +98,16 @@ export default function Dashboard() {
       ></div>
 
       {/* Sidebar */}
-      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''} ps-pattern-bg`}>
+        <div className="ps-symbols-float" style={{ opacity: 0.3 }}>
+          <span className="ps-symbol ps-triangle symbol-t" style={{ width: "24px", height: "24px", top: "5%", left: "10%" }}></span>
+          <span className="ps-symbol ps-circle symbol-c" style={{ width: "20px", height: "20px", top: "40%", right: "15%" }}></span>
+          <span className="ps-symbol ps-x symbol-x" style={{ width: "22px", height: "22px", bottom: "20%", left: "20%" }}></span>
+          <span className="ps-symbol ps-square symbol-s" style={{ width: "18px", height: "18px", top: "70%", right: "10%" }}></span>
+        </div>
         <div className="sidebar-header">
           <div className="logo-icon">
-            <Gamepad2 size={32} color="#0070D1" />
+            <Gamepad2 size={32} color="#FFFFFF" />
           </div>
           <h2 className="logo-text">2M Store</h2>
         </div>

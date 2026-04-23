@@ -245,7 +245,7 @@ export default function POSPanel() {
 
           <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
             <button 
-              className="btn btn-primary" 
+              className="btn btn-primary btn-ps-icon" 
               style={{ flex: 2, padding: "16px", fontSize: "1.1rem" }}
               onClick={handleCheckout}
               disabled={processing || cart.length === 0}
@@ -253,7 +253,7 @@ export default function POSPanel() {
               <Banknote size={20} />
               {processing ? "جاري الدفع..." : "الدفع كاش (CASH)"}
             </button>
-            <button className="btn btn-secondary" style={{ flex: 1 }} disabled={cart.length === 0}>
+            <button className="btn btn-secondary btn-ps-icon" style={{ flex: 1 }} disabled={cart.length === 0}>
               <CreditCard size={20} />
               فيزا
             </button>

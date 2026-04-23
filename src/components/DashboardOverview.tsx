@@ -6,6 +6,13 @@ import { ShoppingCart, Wrench, Package } from "lucide-react";
 export default function DashboardOverview() {
   return (
     <>
+      <div className="ps-symbols-float">
+        <span className="ps-symbol ps-triangle symbol-t"></span>
+        <span className="ps-symbol ps-circle symbol-c"></span>
+        <span className="ps-symbol ps-x symbol-x"></span>
+        <span className="ps-symbol ps-square symbol-s"></span>
+      </div>
+
       <div className="flex-between page-header">
         <h1 className="page-title">نظرة عامة</h1>
         <div className="branch-selector">
@@ -19,7 +26,7 @@ export default function DashboardOverview() {
 
       {/* Quick Stats */}
       <div className="grid-cards" style={{ marginBottom: "32px" }}>
-        <div className="card stat-card">
+        <div className="card stat-card card-ps">
           <div className="stat-icon" style={{ background: "rgba(16, 185, 129, 0.1)", color: "var(--accent-success)" }}>
             <ShoppingCart size={24} />
           </div>
@@ -29,7 +36,7 @@ export default function DashboardOverview() {
           </div>
         </div>
         
-        <div className="card stat-card">
+        <div className="card stat-card card-ps">
           <div className="stat-icon" style={{ background: "rgba(245, 158, 11, 0.1)", color: "var(--accent-warning)" }}>
             <Wrench size={24} />
           </div>
@@ -39,7 +46,7 @@ export default function DashboardOverview() {
           </div>
         </div>
 
-        <div className="card stat-card">
+        <div className="card stat-card card-ps">
           <div className="stat-icon" style={{ background: "rgba(239, 68, 68, 0.1)", color: "var(--accent-danger)" }}>
             <Package size={24} />
           </div>

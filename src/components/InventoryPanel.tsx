@@ -66,7 +66,7 @@ export default function InventoryPanel() {
           <h1 className="page-title">إدارة المخزون</h1>
           <p style={{ color: "var(--text-secondary)", marginTop: "8px" }}>عرض وإدارة جميع الأصناف في الفرع الحالي.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+        <button className="btn btn-primary btn-ps-icon" onClick={() => setIsModalOpen(true)}>
           <Plus size={20} />
           إضافة صنف جديد
         </button>

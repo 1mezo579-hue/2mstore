@@ -106,7 +106,7 @@ export default function MaintenancePanel() {
           <h1 className="page-title">قسم الصيانة</h1>
           <p style={{ color: "var(--text-secondary)", marginTop: "8px" }}>تتبع أعطال الأجهزة وتذاكر الصيانة للعملاء.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+        <button className="btn btn-primary btn-ps-icon" onClick={() => setIsModalOpen(true)}>
           <Plus size={20} />
           فتح تذكرة صيانة
         </button>
@@ -114,7 +114,7 @@ export default function MaintenancePanel() {
 
       {/* Stats Quick View */}
       <div className="grid-cards" style={{ marginBottom: "32px" }}>
-        <div className="card stat-card">
+        <div className="card stat-card card-ps">
           <div className="stat-icon" style={{ background: "rgba(245, 158, 11, 0.1)", color: "var(--accent-warning)" }}>
             <Clock size={24} />
           </div>
@@ -123,7 +123,7 @@ export default function MaintenancePanel() {
             <span className="stat-value">{tickets.filter(t => ["RECEIVED", "DIAGNOSING"].includes(t.status)).length}</span>
           </div>
         </div>
-        <div className="card stat-card">
+        <div className="card stat-card card-ps">
           <div className="stat-icon" style={{ background: "rgba(16, 185, 129, 0.1)", color: "var(--accent-success)" }}>
             <CheckCircle2 size={24} />
           </div>
@@ -132,7 +132,7 @@ export default function MaintenancePanel() {
             <span className="stat-value">{tickets.filter(t => t.status === "REPAIRED").length}</span>
           </div>
         </div>
-        <div className="card stat-card">
+        <div className="card stat-card card-ps">
           <div className="stat-icon" style={{ background: "rgba(156, 163, 175, 0.1)", color: "var(--text-primary)" }}>
             <Wrench size={24} />
           </div>

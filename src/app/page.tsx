@@ -84,7 +84,7 @@ export default function LoginPage() {
 
           <button 
             type="submit" 
-            className={styles.loginButton}
+            className={`${styles.loginButton} btn-ps-icon`}
             disabled={loading}
           >
             {loading ? "جاري تسجيل الدخول..." : "دخول النظام"}
@@ -96,6 +96,13 @@ export default function LoginPage() {
       <div className={styles.backgroundEffects}>
         <div className={styles.glowCircle1}></div>
         <div className={styles.glowCircle2}></div>
+      </div>
+
+      <div className="ps-symbols-float">
+        <span className="symbol-t">△</span>
+        <span className="symbol-c">○</span>
+        <span className="symbol-x">✕</span>
+        <span className="symbol-s">□</span>
       </div>
     </div>
   );
