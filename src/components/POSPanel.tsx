@@ -45,7 +45,7 @@ export default function POSPanel() {
     }));
   };
 
-  const total = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
+  const total = cart.reduce((sum, item) => sum + ((Number(item.sellPrice) || 0) * (Number(item.quantity) || 0)), 0);
 
   const handleCheckout = async () => {
     if (cart.length === 0) return;
@@ -104,7 +104,7 @@ export default function POSPanel() {
                 </div>
                 <h3 style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "15px" }}>{item.name}</h3>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,0.03)", padding: "10px 15px", borderRadius: "100px" }}>
-                   <span style={{ fontSize: "1.3rem", fontWeight: "900", color: "var(--ps-primary)" }}>{(item.price || 0).toLocaleString()} <small style={{ fontSize: "0.7rem" }}>ج.م</small></span>
+                   <span style={{ fontSize: "1.3rem", fontWeight: "900", color: "var(--ps-primary)" }}>{(item.sellPrice || 0).toLocaleString()} <small style={{ fontSize: "0.7rem" }}>ج.م</small></span>
                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--ps-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem", fontWeight: "bold", boxShadow: "0 0 10px var(--ps-primary-glow)" }}>+</div>
                 </div>
               </div>
@@ -135,7 +135,7 @@ export default function POSPanel() {
                 <div key={item.id} style={{ background: "rgba(255,255,255,0.03)", padding: "18px", borderRadius: "20px", display: "flex", gap: "15px", alignItems: "center", border: "1px solid rgba(255,255,255,0.05)" }}>
                    <div style={{ flex: 1 }}>
                       <div style={{ fontSize: "1.05rem", fontWeight: "800" }}>{item.name}</div>
-                      <div style={{ fontSize: "0.9rem", color: "var(--ps-primary)", fontWeight: "700" }}>{item.price} ج.م</div>
+                      <div style={{ fontSize: "0.9rem", color: "var(--ps-primary)", fontWeight: "700" }}>{item.sellPrice} ج.م</div>
                    </div>
                    <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(0,0,0,0.3)", padding: "6px 15px", borderRadius: "100px", border: "1px solid rgba(255,255,255,0.05)" }}>
                       <button onClick={() => updateQuantity(item.id, -1)} style={{ background: "none", border: "none", color: "white", cursor: "pointer" }}><Minus size={16}/></button>

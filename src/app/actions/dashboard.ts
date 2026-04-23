@@ -5,10 +5,10 @@ import { supabase } from "@/lib/db";
 export async function getDashboardStats() {
   try {
     // Inventory count & value
-    const { data: items } = await supabase.from('InventoryItem').select('price, quantity');
+    const { data: items } = await supabase.from('InventoryItem').select('sellPrice, quantity');
     const totalItems = items?.length || 0;
     const lowStock = items?.filter((i: any) => (i.quantity || 0) < 5).length || 0;
-    const inventoryValue = items?.reduce((s: number, i: any) => s + ((Number(i.price) || 0) * (Number(i.quantity) || 0)), 0) || 0;
+    const inventoryValue = items?.reduce((s: number, i: any) => s + ((Number(i.sellPrice) || 0) * (Number(i.quantity) || 0)), 0) || 0;
 
     // Maintenance tickets
     const { data: tickets } = await supabase.from('MaintenanceTicket').select('status');

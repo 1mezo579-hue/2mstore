@@ -19,7 +19,7 @@ export async function processSale(data: any) {
 
   // 2. Process items
   for (const item of data.items) {
-    await supabase.from('SaleItem').insert([{ saleId: sale.id, inventoryItemId: item.id, quantity: item.quantity, price: item.price }]);
+    await supabase.from('SaleItem').insert([{ saleId: sale.id, inventoryItemId: item.id, quantity: item.quantity, price: item.sellPrice || item.price }]);
     const { data: cur } = await supabase.from('InventoryItem').select('quantity').eq('id', item.id).single();
     if (cur) await supabase.from('InventoryItem').update({ quantity: cur.quantity - item.quantity }).eq('id', item.id);
   }

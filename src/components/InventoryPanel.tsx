@@ -73,8 +73,12 @@ export default function InventoryPanel() {
   const [formData, setFormData] = useState({
     name: "",
     category: "أجهزة",
-    price: 0,
+    sellPrice: 0,
+    buyPrice: 0,
     quantity: 0,
+    condition: "جديد",
+    serialNumber: "",
+    barcode: "",
   });
   const [isCustomName, setIsCustomName] = useState(false);
   const [customNameValue, setCustomNameValue] = useState("");
@@ -90,7 +94,10 @@ export default function InventoryPanel() {
 
   const openAddModal = () => {
     setEditingItem(null);
-    setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
+    setFormData({ 
+      name: "", category: "أجهزة", sellPrice: 0, buyPrice: 0, quantity: 0, 
+      condition: "جديد", serialNumber: "", barcode: "" 
+    });
     setIsCustomName(false);
     setCustomNameValue("");
     setIsModalOpen(true);
@@ -101,8 +108,12 @@ export default function InventoryPanel() {
     setFormData({
       name: item.name || "",
       category: item.category || "أجهزة",
-      price: Number(item.price) || 0,
+      sellPrice: Number(item.sellPrice) || 0,
+      buyPrice: Number(item.buyPrice) || 0,
       quantity: Number(item.quantity) || 0,
+      condition: item.condition || "جديد",
+      serialNumber: item.serialNumber || "",
+      barcode: item.barcode || "",
     });
     setIsCustomName(false);
     setCustomNameValue("");
@@ -115,8 +126,6 @@ export default function InventoryPanel() {
     
     const finalName = isCustomName ? customNameValue : formData.name;
     
-    console.log("Submitting Inventory:", { ...formData, name: finalName });
-
     if (!finalName) {
       alert("يرجى اختيار أو كتابة اسم المنتج");
       setSubmitting(false);
@@ -126,8 +135,8 @@ export default function InventoryPanel() {
     const payload = {
       ...formData,
       name: finalName,
-      // Ensure we have a valid number for price and quantity
-      price: Number(formData.price) || 0,
+      sellPrice: Number(formData.sellPrice) || 0,
+      buyPrice: Number(formData.buyPrice) || 0,
       quantity: Number(formData.quantity) || 0,
     };
 
@@ -139,14 +148,9 @@ export default function InventoryPanel() {
         res = await addInventoryItem(payload);
       }
       
-      console.log("Response:", res);
-
       if (res.success) {
         setIsModalOpen(false);
         setEditingItem(null);
-        setFormData({ name: "", category: "أجهزة", price: 0, quantity: 0 });
-        setIsCustomName(false);
-        setCustomNameValue("");
         await fetchItems();
       } else {
         alert("فشل الحفظ: " + res.error);
@@ -160,7 +164,7 @@ export default function InventoryPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("هل أنت متأكد من الحذف؟")) return;
+    if (!confirm("هل أنت متأكد من حذف هذا الصنف؟")) return;
     const res = await deleteInventoryItem(id);
     if (res.success) fetchItems();
     else alert(res.error);
@@ -168,10 +172,11 @@ export default function InventoryPanel() {
 
   const filteredItems = items.filter(i =>
     (i.name || "").toLowerCase().includes((search || "").toLowerCase()) ||
-    (i.category || "").toLowerCase().includes((search || "").toLowerCase())
+    (i.category || "").toLowerCase().includes((search || "").toLowerCase()) ||
+    (i.serialNumber || "").toLowerCase().includes((search || "").toLowerCase())
   );
 
-  const productNames = PRODUCT_NAMES[formData.category] || [];
+  const productNames = PRODUCT_NAMES[formData.category as keyof typeof PRODUCT_NAMES] || [];
 
   return (
     <div className="inventory-panel animate-liquid">
@@ -180,23 +185,23 @@ export default function InventoryPanel() {
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <Package size={20} color="var(--ps-primary)" />
-            <span className="section-label" style={{ margin: 0 }}>المستودع الرقمي</span>
+            <span className="section-label" style={{ margin: 0 }}>المخزون والسلع</span>
           </div>
-          <h1 className="page-title">إدارة المخزون</h1>
+          <h1 className="page-title">إدارة المستودع</h1>
         </div>
         <button className="btn-liquid btn-liquid-primary" onClick={openAddModal}>
-          <Plus size={20} /> إضافة منتج جديد
+          <Plus size={20} /> إضافة صنف جديد
         </button>
       </div>
 
       {/* Table Card */}
       <div className="card" style={{ padding: "0" }}>
-        <div style={{ padding: "25px 30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px" }}>
+        <div style={{ padding: "25px 30px", borderBottom: "var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ position: "relative", width: "350px" }}>
             <Search size={18} style={{ position: "absolute", right: "18px", top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)" }} />
             <input
               type="text"
-              placeholder="ابحث عن منتج..."
+              placeholder="ابحث عن منتج أو سيريال..."
               style={{ width: "100%", padding: "12px 50px 12px 20px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "100px", color: "white", outline: "none" }}
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -204,7 +209,7 @@ export default function InventoryPanel() {
           </div>
           <div style={{ display: "flex", gap: "20px", fontSize: "0.85rem", color: "var(--text-dim)" }}>
             <span>إجمالي الأصناف: <strong style={{ color: "white" }}>{items.length}</strong></span>
-            <span>القيمة الإجمالية: <strong style={{ color: "var(--ps-primary)" }}>{items.reduce((s, i) => s + ((Number(i.price) || 0) * (Number(i.quantity) || 0)), 0).toLocaleString()} ج.م</strong></span>
+            <span>القيمة (بيع): <strong style={{ color: "var(--ps-primary)" }}>{items.reduce((s, i) => s + ((Number(i.sellPrice) || 0) * (Number(i.quantity) || 0)), 0).toLocaleString()} ج.م</strong></span>
           </div>
         </div>
 
@@ -214,7 +219,8 @@ export default function InventoryPanel() {
               <tr>
                 <th>المنتج</th>
                 <th>الفئة</th>
-                <th>السعر</th>
+                <th>الحالة</th>
+                <th>سعر البيع</th>
                 <th>الكمية</th>
                 <th style={{ textAlign: "center" }}>الإجراءات</th>
               </tr>
@@ -222,10 +228,10 @@ export default function InventoryPanel() {
             <tbody>
               {isLoading ? (
                 [1, 2, 3, 4].map(i => (
-                  <tr key={i}><td colSpan={5} style={{ textAlign: "center", padding: "30px", opacity: 0.1 }}>جاري التحميل...</td></tr>
+                  <tr key={i}><td colSpan={6} style={{ textAlign: "center", padding: "30px", opacity: 0.1 }}>جاري التحميل...</td></tr>
                 ))
               ) : filteredItems.length === 0 ? (
-                <tr><td colSpan={5} style={{ textAlign: "center", padding: "80px", color: "var(--text-dim)" }}>
+                <tr><td colSpan={6} style={{ textAlign: "center", padding: "80px", color: "var(--text-dim)" }}>
                   {search ? "لا توجد نتائج مطابقة" : "المخزون فارغ — أضف أول منتج!"}
                 </td></tr>
               ) : filteredItems.map(item => (
@@ -237,31 +243,23 @@ export default function InventoryPanel() {
                       </div>
                       <div>
                         <div style={{ fontWeight: "800", fontSize: "1rem" }}>{item.name}</div>
-                        <div style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>ID: {(item.id || "").toString().slice(-8)}</div>
+                        <div style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>{item.serialNumber || item.id?.toString().slice(-8)}</div>
                       </div>
                     </div>
                   </td>
                   <td><span className="ps-tag">{item.category}</span></td>
-                  <td><span style={{ fontWeight: "900", color: "var(--ps-primary)", fontSize: "1.1rem" }}>{(Number(item.price) || 0).toLocaleString()} <small style={{ fontSize: "0.7rem", opacity: 0.6 }}>ج.م</small></span></td>
+                  <td><span style={{ color: item.condition === 'جديد' ? 'var(--neon-triangle)' : 'var(--neon-circle)', fontWeight: 'bold' }}>{item.condition}</span></td>
+                  <td><span style={{ fontWeight: "900", color: "var(--ps-primary)", fontSize: "1.1rem" }}>{(Number(item.sellPrice) || 0).toLocaleString()} <small style={{ fontSize: "0.7rem", opacity: 0.6 }}>ج.م</small></span></td>
                   <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <span style={{ color: (item.quantity || 0) < 5 ? "var(--neon-circle)" : "white", fontWeight: "900", fontSize: "1.1rem" }}>
-                        {item.quantity}
-                      </span>
-                      <span style={{ fontSize: "0.8rem", color: "var(--text-dim)" }}>قطعة</span>
-                      {(item.quantity || 0) < 5 && (
-                        <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--neon-circle)", boxShadow: "0 0 8px var(--neon-circle)" }} />
-                      )}
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <span style={{ fontWeight: "800", fontSize: "1.1rem", color: (item.quantity || 0) < 5 ? "var(--neon-circle)" : "white" }}>{item.quantity}</span>
+                      {(item.quantity || 0) < 5 && <span style={{ fontSize: "0.6rem", background: "rgba(255,77,109,0.1)", color: "var(--neon-circle)", padding: "2px 6px", borderRadius: "4px" }}>منخفض!</span>}
                     </div>
                   </td>
                   <td>
                     <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                      <button className="btn-liquid" onClick={() => openEditModal(item)} style={{ padding: "10px", borderRadius: "12px" }} title="تعديل">
-                        <Edit size={18} />
-                      </button>
-                      <button className="btn-liquid" onClick={() => handleDelete(item.id)} style={{ padding: "10px", borderRadius: "12px", color: "var(--neon-circle)" }} title="حذف">
-                        <Trash2 size={18} />
-                      </button>
+                      <button className="btn-liquid" style={{ padding: "10px", borderRadius: "12px" }} onClick={() => openEditModal(item)}><Edit size={18} /></button>
+                      <button className="btn-liquid" style={{ padding: "10px", borderRadius: "12px", color: "var(--neon-circle)" }} onClick={() => handleDelete(item.id)}><Trash2 size={18} /></button>
                     </div>
                   </td>
                 </tr>
@@ -274,33 +272,45 @@ export default function InventoryPanel() {
       {/* Add / Edit Modal */}
       {isModalOpen && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-          <div className="card" style={{ width: "95%", maxWidth: "550px", borderTop: "4px solid var(--ps-primary)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "35px" }}>
+          <div className="card animate-liquid" style={{ width: "95%", maxWidth: "700px", maxHeight: "90vh", overflowY: "auto", borderTop: "4px solid var(--ps-primary)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
               <div>
-                <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>{editingItem ? "تعديل بيانات المنتج" : "إضافة صنف جديد"}</h3>
-                <p style={{ color: "var(--text-dim)", fontSize: "0.9rem", marginTop: "5px" }}>{editingItem ? `تعديل: ${editingItem.name}` : "أدخل تفاصيل المنتج"}</p>
+                <h3 style={{ fontSize: "1.8rem", fontWeight: "900" }}>{editingItem ? "تعديل بيانات الصنف" : "إضافة صنف للمخزون"}</h3>
               </div>
               <button onClick={() => setIsModalOpen(false)} style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "white", padding: "10px", borderRadius: "12px", cursor: "pointer" }}>
                 <X size={24} />
               </button>
             </div>
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              {/* Category */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الفئة</label>
-                <select
-                  required
-                  style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}
-                  value={formData.category}
-                  onChange={e => setFormData({ ...formData, category: e.target.value, name: "" })}
-                >
-                  {CATEGORIES.map(cat => (
-                    <option key={cat} value={cat} style={{ background: "#0a0f1e" }}>{cat}</option>
-                  ))}
-                </select>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الفئة</label>
+                  <select
+                    required
+                    style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}
+                    value={formData.category}
+                    onChange={e => setFormData({ ...formData, category: e.target.value, name: "" })}
+                  >
+                    {CATEGORIES.map(cat => (
+                      <option key={cat} value={cat} style={{ background: "#0a0f1e" }}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الحالة</label>
+                  <select
+                    required
+                    style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}
+                    value={formData.condition}
+                    onChange={e => setFormData({ ...formData, condition: e.target.value })}
+                  >
+                    <option value="جديد" style={{ background: "#0a0f1e" }}>جديد (New)</option>
+                    <option value="مستعمل" style={{ background: "#0a0f1e" }}>مستعمل (Used)</option>
+                    <option value="مجدد" style={{ background: "#0a0f1e" }}>مجدد (Refurbished)</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Product Name */}
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>اسم المنتج</label>
                 {productNames.length > 0 ? (
@@ -346,29 +356,29 @@ export default function InventoryPanel() {
                 )}
               </div>
 
-              {/* Price + Quantity */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "15px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>سعر البيع (ج.م)</label>
-                  <input
-                    type="number"
-                    required
-                    min="0"
-                    style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}
-                    value={formData.price}
-                    onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
-                  />
+                  <label style={{ fontSize: "0.8rem", color: "var(--text-soft)", fontWeight: "700" }}>سعر الشراء</label>
+                  <input type="number" required min="0" style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.buyPrice} onChange={e => setFormData({ ...formData, buyPrice: Number(e.target.value) })} />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الكمية المتاحة</label>
-                  <input
-                    type="number"
-                    required
-                    min="0"
-                    style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }}
-                    value={formData.quantity}
-                    onChange={e => setFormData({ ...formData, quantity: Number(e.target.value) })}
-                  />
+                  <label style={{ fontSize: "0.8rem", color: "var(--text-soft)", fontWeight: "700" }}>سعر البيع</label>
+                  <input type="number" required min="0" style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.sellPrice} onChange={e => setFormData({ ...formData, sellPrice: Number(e.target.value) })} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <label style={{ fontSize: "0.8rem", color: "var(--text-soft)", fontWeight: "700" }}>الكمية</label>
+                  <input type="number" required min="0" style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: Number(e.target.value) })} />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الرقم التسلسلي</label>
+                  <input type="text" placeholder="اختياري" style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.serialNumber} onChange={e => setFormData({ ...formData, serialNumber: e.target.value })} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <label style={{ fontSize: "0.9rem", color: "var(--text-soft)", fontWeight: "700" }}>الباركود</label>
+                  <input type="text" placeholder="اختياري" style={{ width: "100%", padding: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "15px", color: "white", outline: "none" }} value={formData.barcode} onChange={e => setFormData({ ...formData, barcode: e.target.value })} />
                 </div>
               </div>
 
@@ -376,7 +386,7 @@ export default function InventoryPanel() {
                 type="submit"
                 className="btn-liquid btn-liquid-primary"
                 disabled={submitting || (!isCustomName && !formData.name) || (isCustomName && !customNameValue)}
-                style={{ width: "100%", marginTop: "10px", padding: "18px", justifyContent: "center", fontSize: "1.1rem" }}
+                style={{ width: "100%", marginTop: "10px", padding: "18px", justifyContent: "center", fontSize: "1.2rem" }}
               >
                 {submitting ? "جاري الحفظ..." : editingItem ? "تحديث المنتج" : "حفظ في المستودع"}
               </button>

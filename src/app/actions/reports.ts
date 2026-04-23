@@ -24,7 +24,7 @@ export async function getReportsData() {
 
     const { data: items } = await supabase
       .from('InventoryItem')
-      .select('id, name, category, price, quantity');
+      .select('id, name, category, sellPrice, quantity');
 
     // Group sales by day
     const salesByDay: Record<string, number> = {};
@@ -37,7 +37,7 @@ export async function getReportsData() {
     const byCategory: Record<string, number> = {};
     (items || []).forEach((item: any) => {
       const cat = item.category || "أخرى";
-      byCategory[cat] = (byCategory[cat] || 0) + ((Number(item.price) || 0) * (Number(item.quantity) || 0));
+      byCategory[cat] = (byCategory[cat] || 0) + ((Number(item.sellPrice) || 0) * (Number(item.quantity) || 0));
     });
 
     // Maintenance by status

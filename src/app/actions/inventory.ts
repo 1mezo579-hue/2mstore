@@ -6,11 +6,8 @@ import { revalidatePath } from "next/cache";
 export async function getInventoryItems() {
   const { data, error } = await supabase.from('InventoryItem').select('*').order('createdAt', { ascending: false });
   if (error) { 
-    console.error("FETCH ERROR InventoryItem:", error.message, error.details, error.hint); 
+    console.error("FETCH ERROR InventoryItem:", error.message); 
     return []; 
-  }
-  if (data && data.length > 0) {
-    console.log("COLUMNS IN InventoryItem:", Object.keys(data[0]));
   }
   return data || [];
 }
@@ -39,10 +36,7 @@ export async function addInventoryItem(data: any) {
     
     if (error) {
       console.error("Supabase Inventory Insert Error:", error);
-      // Diagnostic: Try to get columns
-      const { data: sample } = await supabase.from('InventoryItem').select('*').limit(1);
-      const cols = sample && sample.length > 0 ? Object.keys(sample[0]).join(", ") : "unknown";
-      return { success: false, error: `فشل الحفظ: ${error.message}. الأعمدة المتاحة: ${cols}` };
+      return { success: false, error: `فشل الحفظ: ${error.message}` };
     }
     
     revalidatePath("/dashboard");
