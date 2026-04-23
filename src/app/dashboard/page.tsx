@@ -7,6 +7,7 @@ import {
   Package, 
   ShoppingCart, 
   Wrench, 
+  FileText,
   Store,
   Settings,
   Bell,
