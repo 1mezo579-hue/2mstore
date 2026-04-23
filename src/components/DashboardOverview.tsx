@@ -119,6 +119,7 @@ export default function DashboardOverview() {
           </div>
           <button className="btn-liquid" style={{ width: "100%", marginTop: "30px", justifyContent: "center" }}>تجاهل الكل</button>
         </div>
+      </div>
     </div>
   );
 }
