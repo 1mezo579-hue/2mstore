@@ -12,8 +12,7 @@ import {
   Phone, 
   Smartphone,
   X,
-  Calendar,
-  Tool
+  Calendar
 } from "lucide-react";
 import { getMaintenanceTickets, createMaintenanceTicket, updateTicketStatus } from "@/app/actions/maintenance";
 
