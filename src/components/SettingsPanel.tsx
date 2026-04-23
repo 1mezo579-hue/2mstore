@@ -57,7 +57,7 @@ export default function SettingsPanel() {
                 <h2 style={{ fontSize: "1.6rem", fontWeight: "900" }}>{settingsTabs.find(t => t.id === activeSetting)?.label}</h2>
                 <p style={{ color: "var(--text-dim)", fontSize: "0.9rem" }}>تحكم في كيفية عمل النظام وتخصيص تجربتك</p>
              </div>
-             <button className="btn-liquid btn-liquid-primary"><Save size={20} /> حفظ التعديلات</button>
+             <button className="btn-liquid btn-liquid-primary" onClick={() => alert("تم حفظ الإعدادات بنجاح!")}><Save size={20} /> حفظ التعديلات</button>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "35px" }}>

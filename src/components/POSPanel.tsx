@@ -158,8 +158,8 @@ export default function POSPanel() {
              <span className="ps-tag tag-blue" style={{ padding: "8px 15px" }}>{cart.length} أصناف</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-             <button className="btn-liquid" style={{ width: "100%", justifyContent: "center", padding: "18px" }}>
-                <Banknote size={20} /> دفع كاش
+             <button className="btn-liquid" onClick={handleCheckout} disabled={isProcessing || cart.length === 0} style={{ width: "100%", justifyContent: "center", padding: "18px" }}>
+                <Banknote size={20} /> {isProcessing ? "جاري..." : "دفع كاش"}
              </button>
              <button className="btn-liquid btn-liquid-primary" onClick={handleCheckout} disabled={isProcessing || cart.length === 0} style={{ width: "100%", justifyContent: "center", padding: "18px" }}>
                 <CreditCard size={20} /> {isProcessing ? "جاري..." : "إتمام العملية"}

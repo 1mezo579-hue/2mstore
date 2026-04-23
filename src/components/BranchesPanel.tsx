@@ -95,7 +95,7 @@ export default function BranchesPanel() {
             </div>
 
             <div style={{ padding: "20px 30px" }}>
-               <button className="btn-liquid" style={{ width: "100%", justifyContent: "center" }}>لوحة تحكم الفرع</button>
+               <button className="btn-liquid" onClick={() => alert("جاري فتح لوحة تحكم فرع: " + branch.name)} style={{ width: "100%", justifyContent: "center" }}>لوحة تحكم الفرع</button>
             </div>
           </div>
         ))}
