@@ -183,7 +183,7 @@ export default function UsersPanel() {
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", z-index: 1000 }}>
+        <div className="modal-overlay" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
           <div className="card animate-sweet" style={{ width: "500px" }}>
              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "30px" }}>
                 <h3 style={{ fontSize: "1.5rem" }}>{editingUser ? "تعديل مستخدم" : "إضافة مستخدم جديد"}</h3>
